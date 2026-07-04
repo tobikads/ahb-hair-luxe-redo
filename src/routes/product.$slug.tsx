@@ -218,10 +218,10 @@ function Gallery({
 
 type InfoProps = {
   product: ProductDetail;
-  selectedLength: ReturnType<typeof useState<ProductDetail["lengths"] extends (infer U)[] | undefined ? U : never>>[0];
-  setSelectedLength: (v: any) => void;
-  selectedColor: any;
-  setSelectedColor: (v: any) => void;
+  selectedLength: LengthOption | undefined;
+  setSelectedLength: (v: LengthOption) => void;
+  selectedColor: ColorOption | undefined;
+  setSelectedColor: (v: ColorOption) => void;
   qty: number;
   setQty: (v: number) => void;
   price: number;
