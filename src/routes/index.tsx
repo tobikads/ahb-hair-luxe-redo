@@ -236,6 +236,44 @@ function Reveal({
   );
 }
 
+const brandPromises = [
+  "Soft From Root To Ends",
+  "HD Lace Finish",
+  "Made To Blend",
+  "Full Ends. Soft Touch.",
+  "Installed To Be Noticed",
+  "Local Pickup Available",
+  "Client Favorite Looks",
+  "Luxury Hair, No Guesswork",
+];
+
+function BrandPromiseRibbon() {
+  const items = [...brandPromises, ...brandPromises];
+  return (
+    <div className="relative overflow-hidden bg-cocoa-deep text-champagne/90 py-2 sm:py-2.5">
+      {/* Left fade */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-16 bg-gradient-to-r from-cocoa-deep to-transparent" />
+      {/* Right fade */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-16 bg-gradient-to-l from-cocoa-deep to-transparent" />
+
+      <div
+        className="flex whitespace-nowrap animate-marquee"
+        style={{ "--marquee-duration": "48s" } as React.CSSProperties}
+      >
+        {items.map((phrase, idx) => (
+          <div key={idx} className="flex items-center shrink-0">
+            <span className="font-display text-[11px] sm:text-[13px] tracking-[0.18em] uppercase px-3 sm:px-5">
+              {phrase}
+            </span>
+            <span className="inline-block rotate-45 bg-champagne/50" style={{ width: 3, height: 3 }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
