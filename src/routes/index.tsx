@@ -64,10 +64,10 @@ const slugMap: Record<string, string> = {
 const productSlug = (name: string) => slugMap[name] ?? "body-wave-hd-wig";
 
 const collections = [
-  { title: "HD Lace Wigs", copy: "Invisible melt, unreal blend.", img: collWigs, cta: "Shop wigs" },
-  { title: "Bundles", copy: "Raw, virgin, unprocessed.", img: collBundles, cta: "Shop bundles" },
-  { title: "Closures", copy: "Effortless parting.", img: collClosures, cta: "Shop closures" },
-  { title: "Frontals", copy: "Sculpt your silhouette.", img: collFrontals, cta: "Shop frontals" },
+  { title: "HD Lace Wigs", copy: "Invisible melt, unreal blend.", img: collWigs, cta: "Shop wigs", slug: "wigs" },
+  { title: "Bundles", copy: "Raw, virgin, unprocessed.", img: collBundles, cta: "Shop bundles", slug: "bundles" },
+  { title: "Closures", copy: "Effortless parting.", img: collClosures, cta: "Shop closures", slug: "closures" },
+  { title: "Frontals", copy: "Sculpt your silhouette.", img: collFrontals, cta: "Shop frontals", slug: "frontals" },
 ];
 
 type Product = {
@@ -125,10 +125,10 @@ const products: Product[] = [
 ];
 
 const textures = [
-  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: bodyWaveTexture },
-  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: straightTexture },
-  { name: "Italian Wave", copy: "Loose editorial waves.", img: italianWaveTexture },
-  { name: "Deep Wave", copy: "Defined pattern, full finish.", img: deepWaveTexture },
+  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: bodyWaveTexture, slug: "body-wave" },
+  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: straightTexture, slug: "straight" },
+  { name: "Italian Wave", copy: "Loose editorial waves.", img: italianWaveTexture, slug: "italian-wave" },
+  { name: "Deep Wave", copy: "Defined pattern, full finish.", img: deepWaveTexture, slug: "deep-wave" },
 ];
 
 const reviews = [
@@ -394,12 +394,12 @@ function Home() {
               <button aria-label="Account" className="p-2 rounded-full hover:bg-ivory/10 transition hidden sm:inline-flex">
                 <User className="h-5 w-5" strokeWidth={1.5} />
               </button>
-              <button aria-label="Cart" className="p-2 -mr-2 rounded-full hover:bg-ivory/10 transition relative">
+              <Link to="/cart" aria-label="Cart" className="p-2 -mr-2 rounded-full hover:bg-ivory/10 transition relative">
                 <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
                 <span className="absolute top-0.5 right-0.5 h-4 min-w-4 px-1 rounded-full bg-gold text-cocoa-deep text-[9px] font-semibold grid place-items-center">
                   2
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -503,18 +503,19 @@ function Home() {
                 className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
                 style={{ animation: "fade-up 0.9s ease-out 1.1s forwards" }}
               >
-                <a
-                  href="#bestsellers"
+                <Link
+                  to="/shop"
                   className="inline-flex items-center justify-center h-12 sm:h-13 px-8 bg-ivory text-cocoa-deep text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-champagne transition-colors shadow-lg"
                 >
                   Shop Best Sellers
-                </a>
-                <a
-                  href="#collections"
+                </Link>
+                <Link
+                  to="/collections/$category"
+                  params={{ category: "wigs" }}
                   className="inline-flex items-center justify-center h-12 sm:h-13 px-8 border border-ivory/80 text-ivory text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-ivory hover:text-cocoa-deep transition-colors backdrop-blur-sm"
                 >
                   Explore Collections
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -564,9 +565,10 @@ function Home() {
           <div className="sm:hidden">
             <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {collections.map((c, i) => (
-                <a
+                <Link
                   key={c.title}
-                  href="#"
+                  to="/collections/$category"
+                  params={{ category: c.slug }}
                   className="group relative shrink-0 w-[78%] snap-start overflow-hidden bg-champagne"
                 >
                   <div className="aspect-[4/5] overflow-hidden">
@@ -591,7 +593,7 @@ function Home() {
                       <span>→</span>
                     </span>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
             <div className="px-5 mt-2 text-[10px] tracking-[0.28em] uppercase text-cocoa/50">
@@ -603,7 +605,7 @@ function Home() {
           <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-5">
             {collections.map((c, i) => (
               <Reveal key={c.title} delay={i * 120}>
-                <a href="#" className="group relative block overflow-hidden bg-champagne">
+                <Link to="/collections/$category" params={{ category: c.slug }} className="group relative block overflow-hidden bg-champagne">
                   <div className="aspect-[4/5] overflow-hidden">
                     <img
                       src={c.img}
@@ -626,7 +628,7 @@ function Home() {
                       <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
                     </span>
                   </div>
-                </a>
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -645,9 +647,10 @@ function Home() {
 
           <div className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-5 sm:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {textures.map((t) => (
-              <a
+              <Link
                 key={t.name}
-                href="#"
+                to="/textures/$texture"
+                params={{ texture: t.slug }}
                 className="group relative shrink-0 w-[62%] sm:w-[280px] snap-start overflow-hidden"
               >
                 <div className="aspect-[3/4] overflow-hidden bg-champagne">
@@ -663,7 +666,7 @@ function Home() {
                   <h3 className="font-display text-xl">{t.name}</h3>
                   <p className="text-[11px] text-ivory/80 font-light mt-0.5">{t.copy}</p>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -679,12 +682,12 @@ function Home() {
                 Loved on repeat.
               </h2>
             </div>
-            <a
-              href="#"
+            <Link
+              to="/shop"
               className="hidden sm:inline-block shrink-0 text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1 hover:text-cocoa transition"
             >
               View all
-            </a>
+            </Link>
           </Reveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-10">
@@ -746,9 +749,9 @@ function Home() {
           </div>
 
           <div className="mt-10 sm:hidden text-center">
-            <a href="#" className="text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1">
+            <Link to="/shop" className="text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1">
               View all
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -1067,10 +1070,10 @@ function Home() {
       <nav className="fixed bottom-0 inset-x-0 z-30 sm:hidden bg-cocoa-deep/95 backdrop-blur-xl border-t border-ivory/10 pb-[env(safe-area-inset-bottom)]">
         <ul className="grid grid-cols-4">
           {[
-            { label: "Shop", icon: HomeIcon, href: "#bestsellers" },
+            { label: "Shop", icon: HomeIcon, href: "/shop" },
             { label: "Reviews", icon: Star, href: "#reviews" },
             { label: "Contact", icon: MessageCircle, href: "#contact" },
-            { label: "Cart", icon: ShoppingBag, href: "#" },
+            { label: "Cart", icon: ShoppingBag, href: "/cart" },
           ].map(({ label, icon: Icon, href }) => (
             <li key={label}>
               <a
@@ -1093,6 +1096,13 @@ function Home() {
         >
           {quickView && (
             <div>
+              <button
+                onClick={() => setQuickView(null)}
+                aria-label="Close quick view"
+                className="absolute top-3 right-3 z-20 h-10 w-10 grid place-items-center rounded-full bg-cocoa-deep text-ivory shadow-lg hover:bg-cocoa transition"
+              >
+                <X className="h-5 w-5" strokeWidth={1.75} />
+              </button>
               <div className="pt-3 pb-1 flex justify-center">
                 <span className="h-1 w-10 rounded-full bg-cocoa/20" />
               </div>
