@@ -1070,10 +1070,10 @@ function Home() {
       <nav className="fixed bottom-0 inset-x-0 z-30 sm:hidden bg-cocoa-deep/95 backdrop-blur-xl border-t border-ivory/10 pb-[env(safe-area-inset-bottom)]">
         <ul className="grid grid-cols-4">
           {[
-            { label: "Shop", icon: HomeIcon, href: "#bestsellers" },
+            { label: "Shop", icon: HomeIcon, href: "/shop" },
             { label: "Reviews", icon: Star, href: "#reviews" },
             { label: "Contact", icon: MessageCircle, href: "#contact" },
-            { label: "Cart", icon: ShoppingBag, href: "#" },
+            { label: "Cart", icon: ShoppingBag, href: "/cart" },
           ].map(({ label, icon: Icon, href }) => (
             <li key={label}>
               <a
