@@ -33,11 +33,6 @@ import storyImg from "@/assets/story.jpg";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { property: "og:image", content: "https://ahbhair.com/og.jpg" },
-    ],
-  }),
   component: Home,
 });
 
