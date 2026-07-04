@@ -1,8 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, Minus, Plus, ShieldCheck, MapPin, Sparkles, ShoppingBag } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, Minus, Plus, ShieldCheck, MapPin, Sparkles } from "lucide-react";
 
-import { getProduct, type ProductDetail } from "@/data/products";
+import { getProduct, type ProductDetail, type LengthOption, type ColorOption } from "@/data/products";
 import {
   Accordion,
   AccordionContent,
