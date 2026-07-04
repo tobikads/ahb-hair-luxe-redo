@@ -95,8 +95,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "AHB Hair Extensions — luxury raw virgin hair, HD lace wigs, bundles, closures and frontals designed to blend effortlessly and last beautifully." },
       { property: "og:description", content: "AHB Hair Extensions — luxury raw virgin hair, HD lace wigs, bundles, closures and frontals designed to blend effortlessly and last beautifully." },
       { name: "twitter:description", content: "AHB Hair Extensions — luxury raw virgin hair, HD lace wigs, bundles, closures and frontals designed to blend effortlessly and last beautifully." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/401856f1-b03f-48c2-adf7-a8475aa0e5ea/id-preview-4f598bac--4b10baac-e81a-4eb4-866d-ac2bd225dd4a.lovable.app-1783128371888.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/401856f1-b03f-48c2-adf7-a8475aa0e5ea/id-preview-4f598bac--4b10baac-e81a-4eb4-866d-ac2bd225dd4a.lovable.app-1783128371888.png" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/1hndPuP4FAPEr3qY54wGXv1nluo2/social-images/social-1783135908357-Screenshot_2026-07-03_233140.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/1hndPuP4FAPEr3qY54wGXv1nluo2/social-images/social-1783135908357-Screenshot_2026-07-03_233140.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
