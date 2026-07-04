@@ -297,10 +297,9 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Announcement */}
-      <div className="bg-cocoa-deep text-ivory text-[10px] sm:text-[11px] tracking-[0.28em] uppercase text-center py-2.5 px-4 font-light">
-        Local Pickup Available · Ask About Availability
-      </div>
+      {/* Brand promise ribbon */}
+      <BrandPromiseRibbon />
+
 
       {/* Header — deep chocolate, centered logo */}
       <header
