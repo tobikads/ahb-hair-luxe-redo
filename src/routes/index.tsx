@@ -1096,6 +1096,13 @@ function Home() {
         >
           {quickView && (
             <div>
+              <button
+                onClick={() => setQuickView(null)}
+                aria-label="Close quick view"
+                className="absolute top-3 right-3 z-20 h-10 w-10 grid place-items-center rounded-full bg-cocoa-deep text-ivory shadow-lg hover:bg-cocoa transition"
+              >
+                <X className="h-5 w-5" strokeWidth={1.75} />
+              </button>
               <div className="pt-3 pb-1 flex justify-center">
                 <span className="h-1 w-10 rounded-full bg-cocoa/20" />
               </div>
