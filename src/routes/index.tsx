@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Menu,
@@ -708,9 +708,22 @@ function Home() {
                       {p.length}
                     </p>
                     <h3 className="font-display text-base sm:text-xl leading-snug break-words">
-                      {p.name}
+                      <Link
+                        to="/product/$slug"
+                        params={{ slug: productSlug(p.name) }}
+                        className="hover:underline underline-offset-4"
+                      >
+                        {p.name}
+                      </Link>
                     </h3>
                     <p className="text-sm text-cocoa font-medium">{p.price}</p>
+                    <Link
+                      to="/product/$slug"
+                      params={{ slug: productSlug(p.name) }}
+                      className="inline-block mt-1 text-[10px] tracking-[0.22em] uppercase text-cocoa-deep border-b border-cocoa-deep/40 pb-0.5 hover:border-cocoa-deep"
+                    >
+                      View details
+                    </Link>
                   </div>
                   <button
                     onClick={() => openQuickView(p)}
@@ -718,6 +731,7 @@ function Home() {
                   >
                     Quick View
                   </button>
+
                 </article>
               </Reveal>
             ))}
