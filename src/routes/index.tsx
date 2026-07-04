@@ -647,9 +647,10 @@ function Home() {
 
           <div className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-5 sm:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {textures.map((t) => (
-              <a
+              <Link
                 key={t.name}
-                href="#"
+                to="/textures/$texture"
+                params={{ texture: t.slug }}
                 className="group relative shrink-0 w-[62%] sm:w-[280px] snap-start overflow-hidden"
               >
                 <div className="aspect-[3/4] overflow-hidden bg-champagne">
@@ -665,7 +666,7 @@ function Home() {
                   <h3 className="font-display text-xl">{t.name}</h3>
                   <p className="text-[11px] text-ivory/80 font-light mt-0.5">{t.copy}</p>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
