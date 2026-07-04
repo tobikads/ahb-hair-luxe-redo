@@ -10,24 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TexturesTextureRouteImport } from './routes/textures.$texture'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as CollectionsCategoryRouteImport } from './routes/collections.$category'
+import { Route as TexturesTextureRouteImport } from './routes/textures.$texture'
 
-const ShopRoute = ShopRouteImport.update({
-  id: '/shop',
-  path: '/shop',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TexturesTextureRoute = TexturesTextureRouteImport.update({
-  id: '/textures/$texture',
-  path: '/textures/$texture',
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductSlugRoute = ProductSlugRouteImport.update({
@@ -40,70 +41,56 @@ const CollectionsCategoryRoute = CollectionsCategoryRouteImport.update({
   path: '/collections/$category',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TexturesTextureRoute = TexturesTextureRouteImport.update({
+  id: '/textures/$texture',
+  path: '/textures/$texture',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cart': typeof CartRoute
   '/shop': typeof ShopRoute
-  '/collections/$category': typeof CollectionsCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/collections/$category': typeof CollectionsCategoryRoute
   '/textures/$texture': typeof TexturesTextureRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cart': typeof CartRoute
   '/shop': typeof ShopRoute
-  '/collections/$category': typeof CollectionsCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/collections/$category': typeof CollectionsCategoryRoute
   '/textures/$texture': typeof TexturesTextureRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cart': typeof CartRoute
   '/shop': typeof ShopRoute
-  '/collections/$category': typeof CollectionsCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/collections/$category': typeof CollectionsCategoryRoute
   '/textures/$texture': typeof TexturesTextureRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/shop'
-    | '/collections/$category'
-    | '/product/$slug'
-    | '/textures/$texture'
+  fullPaths: '/' | '/cart' | '/shop' | '/product/$slug' | '/collections/$category' | '/textures/$texture'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/shop'
-    | '/collections/$category'
-    | '/product/$slug'
-    | '/textures/$texture'
-  id:
-    | '__root__'
-    | '/'
-    | '/shop'
-    | '/collections/$category'
-    | '/product/$slug'
-    | '/textures/$texture'
+  to: '/' | '/cart' | '/shop' | '/product/$slug' | '/collections/$category' | '/textures/$texture'
+  id: '__root__' | '/' | '/cart' | '/shop' | '/product/$slug' | '/collections/$category' | '/textures/$texture'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CartRoute: typeof CartRoute
   ShopRoute: typeof ShopRoute
-  CollectionsCategoryRoute: typeof CollectionsCategoryRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  CollectionsCategoryRoute: typeof CollectionsCategoryRoute
   TexturesTextureRoute: typeof TexturesTextureRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/shop': {
-      id: '/shop'
-      path: '/shop'
-      fullPath: '/shop'
-      preLoaderRoute: typeof ShopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -111,11 +98,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/textures/$texture': {
-      id: '/textures/$texture'
-      path: '/textures/$texture'
-      fullPath: '/textures/$texture'
-      preLoaderRoute: typeof TexturesTextureRouteImport
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/product/$slug': {
@@ -132,14 +126,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CollectionsCategoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/textures/$texture': {
+      id: '/textures/$texture'
+      path: '/textures/$texture'
+      fullPath: '/textures/$texture'
+      preLoaderRoute: typeof TexturesTextureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CartRoute: CartRoute,
   ShopRoute: ShopRoute,
-  CollectionsCategoryRoute: CollectionsCategoryRoute,
   ProductSlugRoute: ProductSlugRoute,
+  CollectionsCategoryRoute: CollectionsCategoryRoute,
   TexturesTextureRoute: TexturesTextureRoute,
 }
 export const routeTree = rootRouteImport
