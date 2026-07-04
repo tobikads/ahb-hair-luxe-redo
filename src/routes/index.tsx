@@ -749,9 +749,9 @@ function Home() {
           </div>
 
           <div className="mt-10 sm:hidden text-center">
-            <a href="#" className="text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1">
+            <Link to="/shop" className="text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1">
               View all
-            </a>
+            </Link>
           </div>
         </div>
       </section>
