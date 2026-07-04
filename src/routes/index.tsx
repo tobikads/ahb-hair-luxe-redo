@@ -605,7 +605,7 @@ function Home() {
           <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-5">
             {collections.map((c, i) => (
               <Reveal key={c.title} delay={i * 120}>
-                <a href="#" className="group relative block overflow-hidden bg-champagne">
+                <Link to="/collections/$category" params={{ category: c.slug }} className="group relative block overflow-hidden bg-champagne">
                   <div className="aspect-[4/5] overflow-hidden">
                     <img
                       src={c.img}
@@ -628,7 +628,7 @@ function Home() {
                       <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
                     </span>
                   </div>
-                </a>
+                </Link>
               </Reveal>
             ))}
           </div>
