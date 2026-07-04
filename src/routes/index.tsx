@@ -565,9 +565,10 @@ function Home() {
           <div className="sm:hidden">
             <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {collections.map((c, i) => (
-                <a
+                <Link
                   key={c.title}
-                  href="#"
+                  to="/collections/$category"
+                  params={{ category: c.slug }}
                   className="group relative shrink-0 w-[78%] snap-start overflow-hidden bg-champagne"
                 >
                   <div className="aspect-[4/5] overflow-hidden">
@@ -592,7 +593,7 @@ function Home() {
                       <span>→</span>
                     </span>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
             <div className="px-5 mt-2 text-[10px] tracking-[0.28em] uppercase text-cocoa/50">
