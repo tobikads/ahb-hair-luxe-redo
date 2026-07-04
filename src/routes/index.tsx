@@ -64,10 +64,10 @@ const slugMap: Record<string, string> = {
 const productSlug = (name: string) => slugMap[name] ?? "body-wave-hd-wig";
 
 const collections = [
-  { title: "HD Lace Wigs", copy: "Invisible melt, unreal blend.", img: collWigs, cta: "Shop wigs" },
-  { title: "Bundles", copy: "Raw, virgin, unprocessed.", img: collBundles, cta: "Shop bundles" },
-  { title: "Closures", copy: "Effortless parting.", img: collClosures, cta: "Shop closures" },
-  { title: "Frontals", copy: "Sculpt your silhouette.", img: collFrontals, cta: "Shop frontals" },
+  { title: "HD Lace Wigs", copy: "Invisible melt, unreal blend.", img: collWigs, cta: "Shop wigs", slug: "wigs" },
+  { title: "Bundles", copy: "Raw, virgin, unprocessed.", img: collBundles, cta: "Shop bundles", slug: "bundles" },
+  { title: "Closures", copy: "Effortless parting.", img: collClosures, cta: "Shop closures", slug: "closures" },
+  { title: "Frontals", copy: "Sculpt your silhouette.", img: collFrontals, cta: "Shop frontals", slug: "frontals" },
 ];
 
 type Product = {
