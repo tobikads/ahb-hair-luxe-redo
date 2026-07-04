@@ -125,10 +125,10 @@ const products: Product[] = [
 ];
 
 const textures = [
-  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: bodyWaveTexture },
-  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: straightTexture },
-  { name: "Italian Wave", copy: "Loose editorial waves.", img: italianWaveTexture },
-  { name: "Deep Wave", copy: "Defined pattern, full finish.", img: deepWaveTexture },
+  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: bodyWaveTexture, slug: "body-wave" },
+  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: straightTexture, slug: "straight" },
+  { name: "Italian Wave", copy: "Loose editorial waves.", img: italianWaveTexture, slug: "italian-wave" },
+  { name: "Deep Wave", copy: "Defined pattern, full finish.", img: deepWaveTexture, slug: "deep-wave" },
 ];
 
 const reviews = [
