@@ -55,6 +55,14 @@ export const Route = createFileRoute("/")({
 
 const nav = ["Shop", "Wigs", "Bundles", "Closures & Frontals", "About", "Contact"];
 
+const slugMap: Record<string, string> = {
+  "6x6 HD Lace Closure Wig - Body Wave": "body-wave-hd-wig",
+  "Silk Straight HD Lace Wig": "silk-straight-hd-wig",
+  "Deep Wave HD Lace Wig": "deep-wave-hd-wig",
+  "Honey Blonde Body Wave Wig": "honey-blonde-body-wave-wig",
+};
+const productSlug = (name: string) => slugMap[name] ?? "body-wave-hd-wig";
+
 const collections = [
   { title: "HD Lace Wigs", copy: "Invisible melt, unreal blend.", img: collWigs, cta: "Shop wigs" },
   { title: "Bundles", copy: "Raw, virgin, unprocessed.", img: collBundles, cta: "Shop bundles" },
