@@ -503,18 +503,19 @@ function Home() {
                 className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
                 style={{ animation: "fade-up 0.9s ease-out 1.1s forwards" }}
               >
-                <a
-                  href="#bestsellers"
+                <Link
+                  to="/shop"
                   className="inline-flex items-center justify-center h-12 sm:h-13 px-8 bg-ivory text-cocoa-deep text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-champagne transition-colors shadow-lg"
                 >
                   Shop Best Sellers
-                </a>
-                <a
-                  href="#collections"
+                </Link>
+                <Link
+                  to="/collections/$category"
+                  params={{ category: "wigs" }}
                   className="inline-flex items-center justify-center h-12 sm:h-13 px-8 border border-ivory/80 text-ivory text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-ivory hover:text-cocoa-deep transition-colors backdrop-blur-sm"
                 >
                   Explore Collections
-                </a>
+                </Link>
               </div>
             </div>
           </div>
