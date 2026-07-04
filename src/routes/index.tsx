@@ -21,16 +21,20 @@ import {
   BadgeCheck,
 } from "lucide-react";
 
-import heroImg from "@/assets/hero.jpg";
+import heroImg from "@/assets/hero-real.jpg";
 import collWigs from "@/assets/collection-wigs.jpg";
 import collBundles from "@/assets/collection-bundles.jpg";
 import collClosures from "@/assets/collection-closures.jpg";
 import collFrontals from "@/assets/collection-frontals.jpg";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
-import storyImg from "@/assets/story.jpg";
+import bodyWaveWig from "@/assets/product-body-wave-wig.png";
+import straightWig from "@/assets/product-straight-wig.jpg";
+import deepWaveWig from "@/assets/product-deep-wave-wig.png";
+import blondeWig from "@/assets/product-blonde-wig.png";
+import bodyWaveTexture from "@/assets/texture-body-wave.png";
+import straightTexture from "@/assets/texture-straight.jpg";
+import italianWaveTexture from "@/assets/texture-italian-wave.png";
+import deepWaveTexture from "@/assets/texture-deep-wave.png";
+import storyImg from "@/assets/story-real.jpg";
 import {
   Accordion,
   AccordionContent,
@@ -71,52 +75,52 @@ type Product = {
 
 const products: Product[] = [
   {
-    name: "Signature Body Wave",
-    price: "$285",
-    img: product1,
+    name: "6x6 HD Lace Closure Wig - Body Wave",
+    price: "$650",
+    img: bodyWaveWig,
     tag: "Best Seller",
-    length: '20" bundle',
+    length: "Body wave unit",
     lengths: ['18"', '20"', '22"', '24"'],
     available: true,
-    description: "Soft, full-bodied waves that hold their pattern through wash after wash.",
+    description: "Full, soft body wave texture with a natural-looking lace finish.",
   },
   {
-    name: "Silk Straight Raw",
-    price: "$310",
-    img: product2,
+    name: "Silk Straight HD Lace Wig",
+    price: "$470",
+    img: straightWig,
     tag: "Ready for Pickup",
-    length: '22" bundle',
+    length: "Straight unit",
     lengths: ['18"', '20"', '22"', '24"', '26"'],
     available: true,
-    description: "Cuticle-aligned, unprocessed strands with a natural mirror-shine finish.",
+    description: "Sleek, polished straight hair with soft movement and clean shine.",
   },
   {
-    name: "Deep Wave Luxury",
-    price: "$295",
-    img: product3,
+    name: "Deep Wave HD Lace Wig",
+    price: "$550",
+    img: deepWaveWig,
     tag: "Client Favorite",
-    length: '20" bundle',
+    length: "Deep wave unit",
     lengths: ['18"', '20"', '22"'],
     available: true,
-    description: "Rich, defined waves with a soft hand-feel — full from top to ends.",
+    description: "Defined deep-wave texture with fullness, shine, and a soft hand-feel.",
   },
   {
-    name: "Honey Blonde Wave",
+    name: "Honey Blonde Body Wave Wig",
     price: "$340",
-    img: product4,
+    img: blondeWig,
     tag: "Restocking Soon",
-    length: '22" bundle',
+    length: "Blonde unit",
     lengths: ['20"', '22"'],
     available: false,
-    description: "Hand-painted honey tones on a raw base — a limited seasonal drop.",
+    description: "Dimensional honey-blonde waves for a soft statement look.",
   },
 ];
 
 const textures = [
-  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: product1 },
-  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: product2 },
-  { name: "Italian Wave", copy: "Loose editorial waves.", img: collWigs },
-  { name: "Kinky Curly", copy: "Full coils, defined pattern.", img: product3 },
+  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: bodyWaveTexture },
+  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: straightTexture },
+  { name: "Italian Wave", copy: "Loose editorial waves.", img: italianWaveTexture },
+  { name: "Deep Wave", copy: "Defined pattern, full finish.", img: deepWaveTexture },
 ];
 
 const reviews = [
@@ -247,29 +251,69 @@ const brandPromises = [
   "Luxury Hair, No Guesswork",
 ];
 
-function BrandPromiseRibbon() {
-  const items = [...brandPromises, ...brandPromises];
-  return (
-    <div className="relative overflow-hidden bg-cocoa-deep text-champagne/90 py-2 sm:py-2.5">
-      {/* Left fade */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-16 bg-gradient-to-r from-cocoa-deep to-transparent" />
-      {/* Right fade */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-16 bg-gradient-to-l from-cocoa-deep to-transparent" />
+const brandPromiseDetails = [
+  "Raw Texture",
+  "Melted Lace",
+  "Pickup Ready Drops",
+  "Photo-Ready Installs",
+  "Full Ends Only",
+  "Soft After Every Wash",
+];
 
-      <div
-        className="flex whitespace-nowrap animate-marquee"
-        style={{ "--marquee-duration": "48s" } as React.CSSProperties}
-      >
-        {items.map((phrase, idx) => (
-          <div key={idx} className="flex items-center shrink-0">
-            <span className="font-display text-[11px] sm:text-[13px] tracking-[0.18em] uppercase px-3 sm:px-5">
-              {phrase}
-            </span>
-            <span className="inline-block rotate-45 bg-champagne/50" style={{ width: 3, height: 3 }} />
-          </div>
-        ))}
-      </div>
+function BrandPromiseTrack({
+  items,
+  duration,
+  reverse = false,
+}: {
+  items: string[];
+  duration: string;
+  reverse?: boolean;
+}) {
+  const repeatedItems = [...items, ...items, ...items];
+
+  return (
+    <div
+      className={`flex w-max whitespace-nowrap ${
+        reverse ? "animate-marquee-reverse" : "animate-marquee"
+      }`}
+      style={{ "--marquee-duration": duration } as React.CSSProperties}
+    >
+      {repeatedItems.map((phrase, idx) => (
+        <div key={`${phrase}-${idx}`} className="flex shrink-0 items-center">
+          <span className="font-display px-3 text-[13px] leading-none tracking-[0.08em] text-ivory sm:px-5 sm:text-[18px]">
+            {phrase}
+          </span>
+          <span className="h-1 w-1 rotate-45 bg-gold/80" />
+        </div>
+      ))}
     </div>
+  );
+}
+
+function BrandPromiseRibbon() {
+  return (
+    <section
+      aria-label="AHB quality promises"
+      className="relative isolate overflow-hidden border-y border-gold/20 bg-cocoa-deep text-ivory"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.08),transparent_22%,transparent_78%,rgba(255,255,255,0.08))]" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-cocoa-deep to-transparent sm:w-24" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-cocoa-deep to-transparent sm:w-24" />
+
+      <div className="relative py-3 sm:py-4">
+        <div className="mb-2 flex items-center justify-center gap-3 px-5 sm:hidden">
+          <span className="h-px flex-1 bg-gold/30" />
+          <span className="text-[9px] font-semibold uppercase tracking-[0.34em] text-champagne">
+            AHB Quality Code
+          </span>
+          <span className="h-px flex-1 bg-gold/30" />
+        </div>
+        <BrandPromiseTrack items={brandPromises} duration="44s" />
+        <div className="mt-2 hidden opacity-70 sm:block">
+          <BrandPromiseTrack items={brandPromiseDetails} duration="58s" reverse />
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -297,10 +341,6 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Brand promise ribbon */}
-      <BrandPromiseRibbon />
-
-
       {/* Header — deep chocolate, centered logo */}
       <header
         className={`sticky top-0 z-40 transition-all duration-500 bg-cocoa-deep text-ivory ${
@@ -472,6 +512,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Brand promise ribbon */}
+      <BrandPromiseRibbon />
 
       {/* Luxury promise strip */}
       <section className="border-b border-cocoa/10 bg-ivory">
@@ -723,7 +766,7 @@ function Home() {
             <div className="aspect-[4/5] overflow-hidden bg-champagne">
               <img
                 src={storyImg}
-                alt="Hands touching luxury AHB hair"
+                alt="Model wearing sleek AHB hair extensions"
                 loading="lazy"
                 className="h-full w-full object-cover"
               />
