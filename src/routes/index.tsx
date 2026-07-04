@@ -394,12 +394,12 @@ function Home() {
               <button aria-label="Account" className="p-2 rounded-full hover:bg-ivory/10 transition hidden sm:inline-flex">
                 <User className="h-5 w-5" strokeWidth={1.5} />
               </button>
-              <button aria-label="Cart" className="p-2 -mr-2 rounded-full hover:bg-ivory/10 transition relative">
+              <Link to="/cart" aria-label="Cart" className="p-2 -mr-2 rounded-full hover:bg-ivory/10 transition relative">
                 <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
                 <span className="absolute top-0.5 right-0.5 h-4 min-w-4 px-1 rounded-full bg-gold text-cocoa-deep text-[9px] font-semibold grid place-items-center">
                   2
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
