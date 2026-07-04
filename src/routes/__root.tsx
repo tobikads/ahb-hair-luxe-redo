@@ -91,6 +91,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AHB Hair Extensions | Luxury Raw & Virgin Hair" },
+      { name: "description", content: "AHB Hair Extensions — luxury raw virgin hair, HD lace wigs, bundles, closures and frontals designed to blend effortlessly and last beautifully." },
+      { property: "og:description", content: "AHB Hair Extensions — luxury raw virgin hair, HD lace wigs, bundles, closures and frontals designed to blend effortlessly and last beautifully." },
+      { name: "twitter:description", content: "AHB Hair Extensions — luxury raw virgin hair, HD lace wigs, bundles, closures and frontals designed to blend effortlessly and last beautifully." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/401856f1-b03f-48c2-adf7-a8475aa0e5ea/id-preview-4f598bac--4b10baac-e81a-4eb4-866d-ac2bd225dd4a.lovable.app-1783128371888.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/401856f1-b03f-48c2-adf7-a8475aa0e5ea/id-preview-4f598bac--4b10baac-e81a-4eb4-866d-ac2bd225dd4a.lovable.app-1783128371888.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
