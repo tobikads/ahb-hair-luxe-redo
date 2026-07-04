@@ -682,12 +682,12 @@ function Home() {
                 Loved on repeat.
               </h2>
             </div>
-            <a
-              href="#"
+            <Link
+              to="/shop"
               className="hidden sm:inline-block shrink-0 text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1 hover:text-cocoa transition"
             >
               View all
-            </a>
+            </Link>
           </Reveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-10">
