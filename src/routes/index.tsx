@@ -550,7 +550,7 @@ function Home() {
           <Reveal className="max-w-2xl mb-10 sm:mb-16 px-5 sm:px-0">
             <p className="eyebrow mb-4">The Collections</p>
             <h2 className="font-display text-[2rem] sm:text-5xl leading-[1.05]">
-              Curated for the woman who wears her hair like a signature.
+              Shop The Collections
             </h2>
           </Reveal>
 
