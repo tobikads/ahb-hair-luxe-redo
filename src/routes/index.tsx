@@ -492,16 +492,9 @@ function Home() {
                   True Radiance
                 </span>
               </h1>
-              <p
-                className="mt-6 text-base sm:text-lg text-ivory/90 leading-relaxed max-w-md font-light opacity-0"
-                style={{ animation: "fade-up 0.9s ease-out 0.85s forwards" }}
-              >
-                Luxury hair extensions designed to blend effortlessly, install
-                beautifully, and hold their softness wear after wear.
-              </p>
               <div
-                className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
-                style={{ animation: "fade-up 0.9s ease-out 1.1s forwards" }}
+                className="mt-9 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
+                style={{ animation: "fade-up 0.9s ease-out 0.85s forwards" }}
               >
                 <Link
                   to="/shop"
@@ -557,7 +550,7 @@ function Home() {
           <Reveal className="max-w-2xl mb-10 sm:mb-16 px-5 sm:px-0">
             <p className="eyebrow mb-4">The Collections</p>
             <h2 className="font-display text-[2rem] sm:text-5xl leading-[1.05]">
-              Curated for the woman who wears her hair like a signature.
+              Shop The Collections
             </h2>
           </Reveal>
 
@@ -664,7 +657,6 @@ function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-cocoa-deep/85 via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-4 text-ivory">
                   <h3 className="font-display text-xl">{t.name}</h3>
-                  <p className="text-[11px] text-ivory/80 font-light mt-0.5">{t.copy}</p>
                 </div>
               </Link>
             ))}
