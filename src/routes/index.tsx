@@ -492,16 +492,9 @@ function Home() {
                   True Radiance
                 </span>
               </h1>
-              <p
-                className="mt-6 text-base sm:text-lg text-ivory/90 leading-relaxed max-w-md font-light opacity-0"
-                style={{ animation: "fade-up 0.9s ease-out 0.85s forwards" }}
-              >
-                Luxury hair extensions designed to blend effortlessly, install
-                beautifully, and hold their softness wear after wear.
-              </p>
               <div
-                className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
-                style={{ animation: "fade-up 0.9s ease-out 1.1s forwards" }}
+                className="mt-9 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
+                style={{ animation: "fade-up 0.9s ease-out 0.85s forwards" }}
               >
                 <Link
                   to="/shop"
