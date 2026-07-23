@@ -657,7 +657,6 @@ function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-cocoa-deep/85 via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-4 text-ivory">
                   <h3 className="font-display text-xl">{t.name}</h3>
-                  <p className="text-[11px] text-ivory/80 font-light mt-0.5">{t.copy}</p>
                 </div>
               </Link>
             ))}
