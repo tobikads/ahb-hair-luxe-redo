@@ -4,19 +4,18 @@ import { CollectionView } from "@/components/collection-view";
 
 export const Route = createFileRoute("/collections/$category")({
   loader: ({ params }) => {
-    const cat = categories[params.category];
-    if (!cat) throw notFound();
-    return { cat, items: productsByCategory(cat) };
+    if (!categories[params.category]) throw notFound();
+    return null;
   },
-  head: ({ loaderData }) => {
-    if (!loaderData)
+  head: ({ params }) => {
+    const cat = categories[params.category];
+    if (!cat)
       return {
         meta: [
           { title: "Collection not found — AHB" },
           { name: "robots", content: "noindex" },
         ],
       };
-    const { cat } = loaderData;
     return {
       meta: [
         { title: `${cat.title} — AHB Hair Extensions` },
@@ -41,14 +40,16 @@ export const Route = createFileRoute("/collections/$category")({
 });
 
 function CollectionPage() {
-  const { cat, items } = Route.useLoaderData();
+  const { category } = Route.useParams();
+  const cat = categories[category];
+  if (!cat) return null;
   return (
     <CollectionView
       eyebrow={cat.eyebrow}
       title={cat.title}
       intro={cat.intro}
       hero={cat.hero}
-      items={items}
+      items={productsByCategory(cat)}
     />
   );
 }
