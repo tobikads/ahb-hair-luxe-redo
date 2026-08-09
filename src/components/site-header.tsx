@@ -50,7 +50,9 @@ export function SiteHeader({ overHero = false }: { overHero?: boolean } = {}) {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 text-ivory transition-colors duration-500 ${
+        className={`z-40 text-ivory transition-colors duration-500 ${
+          overHero ? "fixed inset-x-0 top-0" : "sticky top-0"
+        } ${
           overHero && !scrolled
             ? "bg-transparent"
             : "bg-cocoa-deep"
