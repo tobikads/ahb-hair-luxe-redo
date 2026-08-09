@@ -1,6 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, Minus, Plus, ShieldCheck, MapPin, Sparkles } from "lucide-react";
+import { Minus, Plus, ShieldCheck, MapPin, Sparkles } from "lucide-react";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+
 
 import { getProduct, type ProductDetail, type LengthOption, type ColorOption } from "@/data/products";
 import {
@@ -87,24 +90,8 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen bg-background pb-32 lg:pb-16">
-      {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wider uppercase text-foreground/80 hover:text-foreground"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Back
-          </Link>
-          <Link to="/" className="font-display text-lg tracking-tight">
-            AHB
-          </Link>
-          <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-            {product.category}
-          </span>
-        </div>
-      </header>
+      <SiteHeader />
+
 
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:py-12">
         {/* Gallery */}
@@ -150,7 +137,10 @@ function ProductPage() {
           </button>
         </div>
       </div>
+
+      <SiteFooter />
     </div>
+
   );
 }
 

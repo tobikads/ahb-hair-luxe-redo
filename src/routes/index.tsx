@@ -1,1175 +1,546 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import {
-  Menu,
-  Search,
-  User,
-  ShoppingBag,
-  X,
-  Star,
-  Plus,
-  Minus,
-  Instagram,
-  Facebook,
-  MapPin,
-  Mail,
-  Phone,
-  Home as HomeIcon,
-  MessageCircle,
-  ChevronRight,
-  ShieldCheck,
-  BadgeCheck,
-} from "lucide-react";
+import { useState } from "react";
+import { Plus, Minus, MapPin, ChevronRight } from "lucide-react";
 
 import heroImg from "@/assets/hero-real.jpg";
+import storyImg from "@/assets/story-real.jpg";
 import collWigs from "@/assets/collection-wigs.jpg";
 import collBundles from "@/assets/collection-bundles.jpg";
-import collClosures from "@/assets/collection-closures.jpg";
 import collFrontals from "@/assets/collection-frontals.jpg";
-import bodyWaveWig from "@/assets/product-body-wave-wig.png";
-import straightWig from "@/assets/product-straight-wig.jpg";
-import deepWaveWig from "@/assets/product-deep-wave-wig.png";
-import blondeWig from "@/assets/product-blonde-wig.png";
-import bodyWaveTexture from "@/assets/texture-body-wave.png";
-import straightTexture from "@/assets/texture-straight.jpg";
-import italianWaveTexture from "@/assets/texture-italian-wave.png";
-import deepWaveTexture from "@/assets/texture-deep-wave.png";
-import storyImg from "@/assets/story-real.jpg";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "@/components/ui/sheet";
+
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { PromiseRibbon } from "@/components/promise-ribbon";
+import { ProductCard } from "@/components/product-card";
+import { QuickView, useQuickView } from "@/components/quick-view";
+import { Reveal, RevealWords, RevealImage } from "@/components/reveal";
+import { bestSellers, textureList } from "@/lib/catalog";
+import { featuredReview, supportingReviews } from "@/data/reviews";
 
 export const Route = createFileRoute("/")({
-  component: Home,
+  head: () => ({
+    meta: [
+      { title: "AHB Hair Extensions — The Boutique Hair House" },
+      {
+        name: "description",
+        content:
+          "AHB Hair Extensions: HD lace wigs and raw bundles from a private boutique hair house. Local pickup by appointment in Atlanta.",
+      },
+      { property: "og:title", content: "AHB Hair Extensions — The Boutique Hair House" },
+      {
+        property: "og:description",
+        content:
+          "HD lace wigs and raw bundles, soft from root to ends. Local pickup by appointment.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: HomePage,
 });
 
-const nav = ["Shop", "Wigs", "Bundles", "Closures & Frontals", "About", "Contact"];
-
-const slugMap: Record<string, string> = {
-  "6x6 HD Lace Closure Wig - Body Wave": "body-wave-hd-wig",
-  "Silk Straight HD Lace Wig": "silk-straight-hd-wig",
-  "Deep Wave HD Lace Wig": "deep-wave-hd-wig",
-  "Honey Blonde Body Wave Wig": "honey-blonde-body-wave-wig",
-};
-const productSlug = (name: string) => slugMap[name] ?? "body-wave-hd-wig";
-
 const collections = [
-  { title: "HD Lace Wigs", copy: "Invisible melt, unreal blend.", img: collWigs, cta: "Shop wigs", slug: "wigs" },
-  { title: "Bundles", copy: "Raw, virgin, unprocessed.", img: collBundles, cta: "Shop bundles", slug: "bundles" },
-  { title: "Closures", copy: "Effortless parting.", img: collClosures, cta: "Shop closures", slug: "closures" },
-  { title: "Frontals", copy: "Sculpt your silhouette.", img: collFrontals, cta: "Shop frontals", slug: "frontals" },
-];
-
-type Product = {
-  name: string;
-  price: string;
-  img: string;
-  tag: string | null;
-  length: string;
-  lengths?: string[];
-  available: boolean;
-  description: string;
-};
-
-const products: Product[] = [
   {
-    name: "6x6 HD Lace Closure Wig - Body Wave",
-    price: "$650",
-    img: bodyWaveWig,
-    tag: "Best Seller",
-    length: "Body wave unit",
-    lengths: ['18"', '20"', '22"', '24"'],
-    available: true,
-    description: "Full, soft body wave texture with a natural-looking lace finish.",
+    n: "01",
+    title: "HD Lace Wigs",
+    line: "Melted lace, pre-plucked hairline, ready to install.",
+    img: collWigs,
+    links: [{ label: "Shop Wigs", category: "wigs" }],
   },
   {
-    name: "Silk Straight HD Lace Wig",
-    price: "$470",
-    img: straightWig,
-    tag: "Ready for Pickup",
-    length: "Straight unit",
-    lengths: ['18"', '20"', '22"', '24"', '26"'],
-    available: true,
-    description: "Sleek, polished straight hair with soft movement and clean shine.",
+    n: "02",
+    title: "Bundles",
+    line: "Single-donor raw hair, full through the ends.",
+    img: collBundles,
+    links: [{ label: "Shop Bundles", category: "bundles" }],
   },
   {
-    name: "Deep Wave HD Lace Wig",
-    price: "$550",
-    img: deepWaveWig,
-    tag: "Client Favorite",
-    length: "Deep wave unit",
-    lengths: ['18"', '20"', '22"'],
-    available: true,
-    description: "Defined deep-wave texture with fullness, shine, and a soft hand-feel.",
-  },
-  {
-    name: "Honey Blonde Body Wave Wig",
-    price: "$340",
-    img: blondeWig,
-    tag: "Restocking Soon",
-    length: "Blonde unit",
-    lengths: ['20"', '22"'],
-    available: false,
-    description: "Dimensional honey-blonde waves for a soft statement look.",
+    n: "03",
+    title: "Closures & Frontals",
+    line: "A clean parting space, or ear-to-ear styling freedom.",
+    img: collFrontals,
+    links: [
+      { label: "Shop Closures", category: "closures" },
+      { label: "Shop Frontals", category: "frontals" },
+    ],
   },
 ];
 
-const textures = [
-  { name: "Body Wave", copy: "Soft bounce, natural movement.", img: bodyWaveTexture, slug: "body-wave" },
-  { name: "Straight", copy: "Silk-smooth, mirror shine.", img: straightTexture, slug: "straight" },
-  { name: "Italian Wave", copy: "Loose editorial waves.", img: italianWaveTexture, slug: "italian-wave" },
-  { name: "Deep Wave", copy: "Defined pattern, full finish.", img: deepWaveTexture, slug: "deep-wave" },
-];
-
-const reviews = [
+const rituals = [
   {
-    name: "Jasmine R.",
-    location: "Atlanta, GA",
-    product: "HD Lace Body Wave Wig",
-    body: "This wig gave full, soft, birthday hair. I got compliments all night.",
+    q: "Wash with intention",
+    a: "Sulphate-free shampoo, cool water, and always downward through the strand. Never scrub raw hair in circles — it lifts the cuticle and invites tangling.",
   },
   {
-    name: "Simone A.",
-    location: "Houston, TX",
-    product: 'Raw Bundles · 22"',
-    body: "The bundles were thick from top to ends and blended so naturally.",
+    q: "Condition from mid-shaft down",
+    a: "Keep conditioner off the lace and the knots. Work it from the mid-shaft to the ends, leave it five minutes, rinse cool for shine.",
   },
   {
-    name: "Amara K.",
-    location: "Dallas, TX",
-    product: "HD Lace Frontal",
-    body: "The lace melted perfectly and the hair stayed soft after multiple installs.",
+    q: "Air dry, then style",
+    a: "Let the hair dry most of the way before heat. Low heat, a heat protectant, and one pass is enough — repeat passes are what cost you length.",
   },
   {
-    name: "Nia B.",
-    location: "Charlotte, NC",
-    product: "Deep Wave Bundles",
-    body: "It looked fresh even after reinstalling. That's what sold me.",
-  },
-  {
-    name: "Taylor M.",
-    location: "Miami, FL",
-    product: "Silk Straight Raw",
-    body: "Softest hair I've ever touched. Zero shedding after weeks of wear.",
-  },
-];
-
-const featuredReview = {
-  name: "Kori D.",
-  location: "New Orleans, LA",
-  product: "HD Lace Wig · Body Wave",
-  body: "I've bought from every so-called luxury brand. Nothing compares. The density, the softness, the melt — AHB is the standard.",
-};
-
-const care = [
-  {
-    title: "Wash gently",
-    copy: "Cool water, sulfate-free cleanser, downward strokes only. Let the hair breathe between washes to preserve softness and pattern.",
-  },
-  {
-    title: "Wrap before bed",
-    copy: "Silk bonnet or silk pillowcase every night. It protects the ends, keeps waves defined, and cuts overnight tangling in half.",
-  },
-  {
-    title: "Use lightweight products",
-    copy: "Featherlight oils and water-based leave-ins. Heavy creams weigh the strands down and dull the natural shine.",
+    q: "Sleep protected",
+    a: "Braid or twist loosely, wrap in satin. Cotton pulls moisture straight out of the ends overnight.",
   },
 ];
 
 const faqs = [
-  { q: "How long does the hair last?", a: "With proper care, our raw virgin bundles last 2–3 years, and HD lace units last 12–18 months of consistent wear." },
-  { q: "Can the hair be dyed or bleached?", a: "Yes. Because our hair is raw and unprocessed, it takes color beautifully. We recommend a licensed colorist for best results." },
-  { q: "How does pickup work?", a: "We offer local pickup by appointment. After checkout, we'll confirm your pickup time and location. Message us any time to check current availability." },
-  { q: "What is your return policy?", a: "Unopened bundles and untampered units can be exchanged within 14 days. Custom-colored units are final sale." },
-  { q: "How do I choose the right lace?", a: "HD lace is our finest, virtually invisible film. Transparent lace is more durable and ideal for everyday wear. Reach out for a personal recommendation." },
+  {
+    q: "Do you ship?",
+    a: "No. Every order is collected in person by appointment, so we can check the hair with you before it leaves the studio.",
+  },
+  {
+    q: "How does pickup work?",
+    a: "Place your order, then message us to confirm a pickup window. We'll share the meeting details for your appointment directly.",
+  },
+  {
+    q: "Can I colour or bleach the hair?",
+    a: "Raw bundles and our HD units can be coloured and heat styled. We always recommend a licensed stylist for lifting beyond a natural shade.",
+  },
+  {
+    q: "What if my length or texture is sold out?",
+    a: "Message us. Drops restock in small runs, and we'll tell you honestly what's in the studio and when the next one lands.",
+  },
 ];
 
-/* Reveal on scroll (respects prefers-reduced-motion) */
-function useReveal<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  const [shown, setShown] = useState(false);
-  useEffect(() => {
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
-      setShown(true);
-      return;
-    }
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setShown(true);
-            io.disconnect();
-          }
-        });
-      },
-      { threshold: 0.14, rootMargin: "0px 0px -50px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return { ref, shown };
-}
-
-function Reveal({
-  children,
-  delay = 0,
-  className = "",
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const { ref, shown } = useReveal<HTMLDivElement>();
-  return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: shown ? `${delay}ms` : "0ms" }}
-      className={`transition-all duration-[900ms] ease-out ${
-        shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-      } ${className}`}
-    >
-      {children}
-    </div>
-  );
-}
-
-const brandPromises = [
-  "Soft From Root To Ends",
-  "HD Lace Finish",
-  "Made To Blend",
-  "Full Ends. Soft Touch.",
-  "Installed To Be Noticed",
-  "Local Pickup Available",
-  "Client Favorite Looks",
-  "Luxury Hair, No Guesswork",
-];
-
-const brandPromiseDetails = [
-  "Raw Texture",
-  "Melted Lace",
-  "Pickup Ready Drops",
-  "Photo-Ready Installs",
-  "Full Ends Only",
-  "Soft After Every Wash",
-];
-
-function BrandPromiseTrack({
-  items,
-  duration,
-  reverse = false,
-}: {
-  items: string[];
-  duration: string;
-  reverse?: boolean;
-}) {
-  const repeatedItems = [...items, ...items, ...items];
+function HomePage() {
+  const quick = useQuickView();
 
   return (
-    <div
-      className={`flex w-max whitespace-nowrap ${
-        reverse ? "animate-marquee-reverse" : "animate-marquee"
-      }`}
-      style={{ "--marquee-duration": duration } as React.CSSProperties}
-    >
-      {repeatedItems.map((phrase, idx) => (
-        <div key={`${phrase}-${idx}`} className="flex shrink-0 items-center">
-          <span className="font-display px-3 text-[13px] leading-none tracking-[0.08em] text-ivory sm:px-5 sm:text-[18px]">
-            {phrase}
-          </span>
-          <span className="h-1 w-1 rotate-45 bg-gold/80" />
-        </div>
-      ))}
-    </div>
-  );
-}
+    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+      <SiteHeader />
 
-function BrandPromiseRibbon() {
-  return (
-    <section
-      aria-label="AHB quality promises"
-      className="relative isolate overflow-hidden border-y border-gold/20 bg-cocoa-deep text-ivory"
-    >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.08),transparent_22%,transparent_78%,rgba(255,255,255,0.08))]" />
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-cocoa-deep to-transparent sm:w-24" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-cocoa-deep to-transparent sm:w-24" />
-
-      <div className="relative py-3 sm:py-4">
-        <div className="mb-2 flex items-center justify-center gap-3 px-5 sm:hidden">
-          <span className="h-px flex-1 bg-gold/30" />
-          <span className="text-[9px] font-semibold uppercase tracking-[0.34em] text-champagne">
-            AHB Quality Code
-          </span>
-          <span className="h-px flex-1 bg-gold/30" />
-        </div>
-        <BrandPromiseTrack items={brandPromises} duration="44s" />
-        <div className="mt-2 hidden opacity-70 sm:block">
-          <BrandPromiseTrack items={brandPromiseDetails} duration="58s" reverse />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [quickView, setQuickView] = useState<Product | null>(null);
-  const [selectedLength, setSelectedLength] = useState<string | null>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-  }, [menuOpen]);
-
-  const openQuickView = (p: Product) => {
-    setSelectedLength(p.lengths?.[0] ?? null);
-    setQuickView(p);
-  };
-
-  return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Header — deep chocolate, centered logo */}
-      <header
-        className={`sticky top-0 z-40 transition-all duration-500 bg-cocoa-deep text-ivory ${
-          scrolled ? "shadow-[0_10px_30px_-20px_rgba(0,0,0,0.6)]" : ""
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-8">
-          <div className="grid grid-cols-[auto_1fr_auto] items-center h-14 sm:h-20 gap-2">
-            <div className="flex items-center gap-1 min-w-0">
-              <button
-                onClick={() => setMenuOpen(true)}
-                aria-label="Open menu"
-                className="p-2 -ml-2 rounded-full hover:bg-ivory/10 transition"
-              >
-                <Menu className="h-5 w-5" strokeWidth={1.5} />
-              </button>
-              <nav className="hidden lg:flex items-center gap-8 ml-6">
-                {nav.slice(0, 4).map((item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    className="text-[11px] tracking-[0.22em] uppercase text-ivory/85 hover:text-champagne transition-colors font-medium"
-                  >
-                    {item}
-                  </a>
-                ))}
-              </nav>
-            </div>
-
-            <a href="/" className="text-center leading-none select-none justify-self-center">
-              <div className="font-display text-xl sm:text-[28px] tracking-[0.32em] text-ivory">
-                AHB
-              </div>
-              <div className="text-[7px] sm:text-[9px] tracking-[0.42em] uppercase text-champagne/80 mt-1">
-                Hair Extensions
-              </div>
-            </a>
-
-            <div className="flex items-center justify-end gap-0.5 min-w-0">
-              <button aria-label="Search" className="p-2 rounded-full hover:bg-ivory/10 transition">
-                <Search className="h-5 w-5" strokeWidth={1.5} />
-              </button>
-              <button aria-label="Account" className="p-2 rounded-full hover:bg-ivory/10 transition hidden sm:inline-flex">
-                <User className="h-5 w-5" strokeWidth={1.5} />
-              </button>
-              <Link to="/cart" aria-label="Cart" className="p-2 -mr-2 rounded-full hover:bg-ivory/10 transition relative">
-                <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
-                <span className="absolute top-0.5 right-0.5 h-4 min-w-4 px-1 rounded-full bg-gold text-cocoa-deep text-[9px] font-semibold grid place-items-center">
-                  2
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Menu Drawer */}
-      <div
-        className={`fixed inset-0 z-50 transition-opacity duration-500 ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div
-          className="absolute inset-0 bg-cocoa-deep/60 backdrop-blur-sm"
-          onClick={() => setMenuOpen(false)}
+      {/* ── HERO ───────────────────────────────────────── */}
+      <section className="relative isolate min-h-[86svh] overflow-hidden bg-cocoa-deep text-ivory sm:min-h-[92svh]">
+        <img
+          src={heroImg}
+          alt="AHB client wearing an HD lace install"
+          className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-[70%_center]"
         />
-        <aside
-          className={`absolute inset-y-0 left-0 w-[86%] max-w-sm bg-ivory shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
-            menuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <div className="flex items-center justify-between px-6 py-5 border-b border-cocoa/10">
-            <span className="font-display text-lg tracking-[0.28em] text-cocoa-deep">AHB</span>
-            <button onClick={() => setMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2">
-              <X className="h-5 w-5" strokeWidth={1.5} />
-            </button>
-          </div>
-          <nav className="flex-1 overflow-y-auto px-6 py-8">
-            <ul className="space-y-1">
-              {nav.map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="flex items-center justify-between font-display text-[22px] py-3.5 border-b border-cocoa/10 hover:text-cocoa transition"
-                  >
-                    <span>{item}</span>
-                    <ChevronRight className="h-4 w-4 text-cocoa/40" strokeWidth={1.5} />
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-10 space-y-3">
-              <p className="eyebrow mb-3">Visit / Contact</p>
-              <p className="text-sm text-muted-foreground leading-relaxed font-light">
-                Local pickup by appointment.
-                <br />
-                concierge@ahbhair.com
-              </p>
-            </div>
-          </nav>
-          <div className="px-6 py-6 border-t border-cocoa/10 flex gap-2">
-            <a className="p-2.5 rounded-full hover:bg-champagne" href="#" aria-label="Instagram">
-              <Instagram className="h-4 w-4" strokeWidth={1.5} />
-            </a>
-            <a className="p-2.5 rounded-full hover:bg-champagne" href="#" aria-label="Facebook">
-              <Facebook className="h-4 w-4" strokeWidth={1.5} />
-            </a>
-          </div>
-        </aside>
-      </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-cocoa-deep/85 via-cocoa-deep/45 to-cocoa-deep/90" />
+        <div className="absolute inset-0 bg-gradient-to-r from-cocoa-deep/80 via-cocoa-deep/25 to-transparent" />
 
-      {/* Hero — line-by-line reveal */}
-      <section className="relative">
-        <div className="relative h-[92svh] min-h-[580px] max-h-[880px] w-full overflow-hidden">
-          <img
-            src={heroImg}
-            alt="Model with luxury AHB hair extensions"
-            className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-cocoa-deep/50 via-cocoa-deep/25 to-cocoa-deep/85 sm:bg-gradient-to-r sm:from-cocoa-deep/80 sm:via-cocoa-deep/35 sm:to-cocoa-deep/10" />
-
-          <div className="relative h-full mx-auto max-w-7xl px-5 sm:px-8 flex items-end sm:items-center">
-            <div className="pb-14 sm:pb-0 max-w-xl text-ivory">
-              <p
-                className="eyebrow text-champagne/90 mb-5 opacity-0"
-                style={{ animation: "fade-up 0.9s ease-out 0.05s forwards" }}
-              >
+        <div className="relative mx-auto flex min-h-[86svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-24 sm:min-h-[92svh] sm:px-8 sm:pb-24 lg:justify-center lg:pb-32">
+          <div className="max-w-xl">
+            <Reveal>
+              <p className="eyebrow" style={{ color: "var(--gold)" }}>
                 The Boutique Hair House
               </p>
-              <h1 className="font-display text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-7xl">
-                <span
-                  className="block opacity-0"
-                  style={{ animation: "fade-up 0.9s ease-out 0.25s forwards" }}
-                >
-                  Unlock Your
-                </span>
-                <span
-                  className="block not-italic text-champagne opacity-0"
-                  style={{ animation: "fade-up 0.9s ease-out 0.55s forwards" }}
-                >
-                  True Radiance
-                </span>
-              </h1>
-              <div
-                className="mt-9 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0"
-                style={{ animation: "fade-up 0.9s ease-out 0.85s forwards" }}
-              >
+            </Reveal>
+            <h1 className="mt-4 font-display text-[2.6rem] leading-[1.02] sm:text-6xl lg:text-7xl">
+              <RevealWords text="Unlock Your" delay={120} />
+              <br />
+              <RevealWords text="True Radiance" delay={340} />
+            </h1>
+            <Reveal delay={520}>
+              <p className="mt-5 max-w-sm text-sm font-light leading-relaxed text-ivory/80 sm:text-base">
+                Raw texture and melted lace, selected one piece at a time.
+              </p>
+            </Reveal>
+            <Reveal delay={640}>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/shop"
-                  className="inline-flex items-center justify-center h-12 sm:h-13 px-8 bg-ivory text-cocoa-deep text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-champagne transition-colors shadow-lg"
+                  to="/collections/$category"
+                  params={{ category: "best-sellers" }}
+                  className="grid h-13 min-h-[52px] place-items-center bg-ivory px-9 text-[11px] font-semibold uppercase tracking-[0.26em] text-cocoa-deep transition hover:bg-champagne"
                 >
                   Shop Best Sellers
                 </Link>
                 <Link
-                  to="/collections/$category"
-                  params={{ category: "wigs" }}
-                  className="inline-flex items-center justify-center h-12 sm:h-13 px-8 border border-ivory/80 text-ivory text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-ivory hover:text-cocoa-deep transition-colors backdrop-blur-sm"
+                  to="/shop"
+                  className="grid h-13 min-h-[52px] place-items-center border border-ivory/60 px-9 text-[11px] font-semibold uppercase tracking-[0.26em] text-ivory transition hover:bg-ivory hover:text-cocoa-deep"
                 >
                   Explore Collections
                 </Link>
               </div>
-            </div>
+            </Reveal>
           </div>
+        </div>
+
+        <div className="pointer-events-none absolute bottom-5 right-5 hidden text-right sm:block">
+          <p className="text-[9px] uppercase tracking-[0.34em] text-ivory/55">
+            Local Pickup
+          </p>
+          <p className="text-[9px] uppercase tracking-[0.34em] text-champagne/70">
+            By Appointment
+          </p>
         </div>
       </section>
 
-      {/* Brand promise ribbon */}
-      <BrandPromiseRibbon />
+      <PromiseRibbon />
 
-      {/* Luxury promise strip */}
-      <section className="border-b border-cocoa/10 bg-ivory">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 py-6 sm:py-7">
-          <ul className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6 divide-y md:divide-y-0 md:divide-x divide-cocoa/10">
-            {[
-              "Premium Hair Quality",
-              "HD Lace Options",
-              "Local Pickup Available",
-              "Secure Checkout",
-            ].map((label, i) => (
-              <li
-                key={label}
-                className={`flex items-center justify-center gap-2 text-center md:px-4 ${
-                  i >= 2 ? "pt-4 md:pt-0" : ""
-                }`}
-              >
-                <span className="h-1 w-1 rounded-full bg-gold shrink-0" />
-                <span className="text-[10px] sm:text-[11px] tracking-[0.24em] uppercase text-cocoa-deep/85 font-medium">
-                  {label}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Collections — swipeable on mobile, grid on desktop */}
-      <section id="collections" className="py-16 sm:py-28">
-        <div className="mx-auto max-w-7xl sm:px-8">
-          <Reveal className="max-w-2xl mb-10 sm:mb-16 px-5 sm:px-0">
-            <p className="eyebrow mb-4">The Collections</p>
-            <h2 className="font-display text-[2rem] sm:text-5xl leading-[1.05]">
-              Shop The Collections
-            </h2>
-          </Reveal>
-
-          {/* Mobile: horizontal swipe */}
-          <div className="sm:hidden">
-            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {collections.map((c, i) => (
-                <Link
-                  key={c.title}
-                  to="/collections/$category"
-                  params={{ category: c.slug }}
-                  className="group relative shrink-0 w-[78%] snap-start overflow-hidden bg-champagne"
-                >
-                  <div className="aspect-[4/5] overflow-hidden">
-                    <img
-                      src={c.img}
-                      alt={c.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-cocoa-deep/90 via-cocoa-deep/20 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="text-[9px] tracking-[0.32em] uppercase text-ivory/80 font-light">
-                      0{i + 1}
-                    </span>
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-ivory">
-                    <h3 className="font-display text-2xl leading-tight">{c.title}</h3>
-                    <p className="mt-1 text-sm text-ivory/85 font-light">{c.copy}</p>
-                    <span className="mt-3 inline-flex items-center gap-2 text-[10px] tracking-[0.28em] uppercase text-champagne">
-                      <span className="border-b border-champagne/70 pb-0.5">{c.cta}</span>
-                      <span>→</span>
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-            <div className="px-5 mt-2 text-[10px] tracking-[0.28em] uppercase text-cocoa/50">
-              ← Swipe
-            </div>
-          </div>
-
-          {/* Desktop grid */}
-          <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {collections.map((c, i) => (
-              <Reveal key={c.title} delay={i * 120}>
-                <Link to="/collections/$category" params={{ category: c.slug }} className="group relative block overflow-hidden bg-champagne">
-                  <div className="aspect-[4/5] overflow-hidden">
-                    <img
-                      src={c.img}
-                      alt={c.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-cocoa-deep/90 via-cocoa-deep/20 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="text-[9px] tracking-[0.32em] uppercase text-ivory/80 font-light">
-                      0{i + 1}
-                    </span>
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-6 text-ivory">
-                    <h3 className="font-display text-2xl leading-tight">{c.title}</h3>
-                    <p className="mt-1 text-sm text-ivory/85 font-light">{c.copy}</p>
-                    <span className="mt-4 inline-flex items-center gap-2 text-[10px] tracking-[0.28em] uppercase text-champagne">
-                      <span className="border-b border-champagne/70 pb-0.5">{c.cta}</span>
-                      <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-                    </span>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Texture rail — swipeable */}
-      <section className="py-16 sm:py-24 bg-champagne/30">
-        <div className="mx-auto max-w-7xl sm:px-8">
-          <Reveal className="max-w-2xl mb-8 sm:mb-12 px-5 sm:px-0">
-            <p className="eyebrow mb-4">Find Your Texture</p>
-            <h2 className="font-display text-[2rem] sm:text-5xl leading-[1.05]">
-              A texture for every mood.
-            </h2>
-          </Reveal>
-
-          <div className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-5 sm:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {textures.map((t) => (
-              <Link
-                key={t.name}
-                to="/textures/$texture"
-                params={{ texture: t.slug }}
-                className="group relative shrink-0 w-[62%] sm:w-[280px] snap-start overflow-hidden"
-              >
-                <div className="aspect-[3/4] overflow-hidden bg-champagne">
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-105"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-cocoa-deep/85 via-transparent to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4 text-ivory">
-                  <h3 className="font-display text-xl">{t.name}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Best Sellers */}
-      <section id="bestsellers" className="py-16 sm:py-28">
+      {/* ── COLLECTIONS ────────────────────────────────── */}
+      <section id="collections" className="py-14 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <Reveal className="flex items-end justify-between mb-10 sm:mb-16 gap-4">
+          <div className="flex items-end justify-between gap-6">
             <div className="min-w-0">
-              <p className="eyebrow mb-4">Best Sellers</p>
-              <h2 className="font-display text-[2rem] sm:text-5xl leading-[1.05]">
-                Loved on repeat.
+              <Reveal>
+                <p className="eyebrow" style={{ color: "var(--gold)" }}>
+                  The Collections
+                </p>
+              </Reveal>
+              <h2 className="mt-3 font-display text-[1.9rem] leading-[1.08] sm:text-5xl">
+                <RevealWords text="Shop The Collections" />
               </h2>
             </div>
-            <Link
-              to="/shop"
-              className="hidden sm:inline-block shrink-0 text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1 hover:text-cocoa transition"
+            <Reveal className="hidden shrink-0 sm:block">
+              <Link
+                to="/shop"
+                className="border-b border-cocoa-deep/40 pb-1 text-[10px] uppercase tracking-[0.24em] hover:border-cocoa-deep"
+              >
+                All products
+              </Link>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* mobile swipe rail / desktop grid */}
+        <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:px-8 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {collections.map((c, i) => (
+            <Reveal
+              as="article"
+              key={c.title}
+              delay={i * 110}
+              className="relative w-[78vw] max-w-[340px] shrink-0 snap-start lg:w-auto lg:max-w-none"
             >
-              View all
-            </Link>
-          </Reveal>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-10">
-            {products.map((p, i) => (
-              <Reveal key={p.name} delay={i * 100}>
-                <article className="group min-w-0">
-                  <button
-                    onClick={() => openQuickView(p)}
-                    className="relative block w-full aspect-[4/5] overflow-hidden bg-champagne text-left"
-                    aria-label={`Quick view ${p.name}`}
-                  >
-                    <img
-                      src={p.img}
-                      alt={p.name}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
-                    />
-                    {p.tag && (
-                      <span className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 bg-ivory/95 text-cocoa-deep text-[9px] tracking-[0.18em] uppercase px-2 py-1 font-medium">
-                        {p.tag}
-                      </span>
-                    )}
-                    <span className="absolute inset-x-3 bottom-3 h-10 bg-cocoa-deep/95 text-ivory text-[10px] tracking-[0.24em] uppercase items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 hidden sm:flex">
-                      Quick View
-                    </span>
-                  </button>
-                  <div className="mt-3 sm:mt-4 space-y-1 min-w-0">
-                    <p className="text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
-                      {p.length}
-                    </p>
-                    <h3 className="font-display text-base sm:text-xl leading-snug break-words">
-                      <Link
-                        to="/product/$slug"
-                        params={{ slug: productSlug(p.name) }}
-                        className="hover:underline underline-offset-4"
-                      >
-                        {p.name}
-                      </Link>
-                    </h3>
-                    <p className="text-sm text-cocoa font-medium">{p.price}</p>
-                    <Link
-                      to="/product/$slug"
-                      params={{ slug: productSlug(p.name) }}
-                      className="inline-block mt-1 text-[10px] tracking-[0.22em] uppercase text-cocoa-deep border-b border-cocoa-deep/40 pb-0.5 hover:border-cocoa-deep"
-                    >
-                      View details
-                    </Link>
-                  </div>
-                  <button
-                    onClick={() => openQuickView(p)}
-                    className="mt-3 w-full sm:hidden h-10 border border-cocoa-deep text-cocoa-deep text-[10px] tracking-[0.24em] uppercase hover:bg-cocoa-deep hover:text-ivory transition"
-                  >
-                    Quick View
-                  </button>
-
-                </article>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mt-10 sm:hidden text-center">
-            <Link to="/shop" className="text-[11px] tracking-[0.24em] uppercase border-b border-cocoa-deep pb-1">
-              View all
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Brand story */}
-      <section className="py-16 sm:py-32 bg-champagne/30">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <Reveal className="order-2 lg:order-1">
-            <p className="eyebrow mb-5">The AHB Story</p>
-            <h2 className="font-display text-[2rem] sm:text-5xl lg:text-6xl leading-[1.05]">
-              Hair that moves like it's <em className="not-italic text-cocoa">yours</em>.
-            </h2>
-            <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-lg font-light">
-              AHB Hair Extensions was made for women who care about the details:
-              soft texture, natural blending, full ends, and installs that
-              photograph beautifully.
-            </p>
-
-            <ul className="mt-8 sm:mt-10 space-y-6">
-              {[
-                { t: "Natural-looking blend", d: "Cuticles aligned, ends full — indistinguishable from your own." },
-                { t: "Full-bodied texture", d: "A soft hand-feel that stays luxurious past the first wash." },
-                { t: "Long-lasting quality", d: "With proper care, your hair lives with you for years, not weeks." },
-              ].map((item, i) => (
-                <li key={item.t} className="flex gap-5 border-t border-cocoa/15 pt-5">
-                  <span className="font-display text-sm text-gold pt-1 w-6 shrink-0">0{i + 1}</span>
-                  <div className="min-w-0">
-                    <h4 className="font-display text-lg sm:text-xl">{item.t}</h4>
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{item.d}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-
-          <Reveal delay={150} className="order-1 lg:order-2 relative">
-            <div className="aspect-[4/5] overflow-hidden bg-champagne">
-              <img
-                src={storyImg}
-                alt="Model wearing sleek AHB hair extensions"
-                loading="lazy"
-                className="h-full w-full object-cover"
+              <RevealImage
+                src={c.img}
+                alt={c.title}
+                delay={i * 90}
+                className="aspect-[3/4] w-full bg-champagne"
+                imgClassName="transition-transform duration-[1400ms] ease-out hover:scale-[1.04]"
               />
-            </div>
-            <div className="absolute -bottom-5 -left-4 sm:-bottom-8 sm:-left-8 bg-ivory px-5 py-4 sm:px-8 sm:py-6 shadow-[var(--shadow-soft)] border-t-2 border-gold">
-              <p className="font-display text-2xl sm:text-3xl">10+ yrs</p>
-              <p className="eyebrow mt-1">Sourcing raw hair</p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Signature Reviews — Loved by the AHB Girls */}
-      <section id="reviews" className="relative py-20 sm:py-32 bg-cocoa-deep text-ivory overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.07] pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 15% 20%, var(--gold) 0px, transparent 40%), radial-gradient(circle at 85% 65%, var(--champagne) 0px, transparent 40%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
-          <Reveal className="text-center max-w-2xl mx-auto mb-14 sm:mb-16">
-            <p
-              className="eyebrow mb-4"
-              style={{ color: "var(--gold)" }}
-            >
-              The Client Diary
-            </p>
-            <h2 className="font-display text-[2.25rem] sm:text-5xl lg:text-6xl leading-[1.05]">
-              Loved by the <em className="not-italic text-champagne">AHB Girls</em>.
-            </h2>
-            <p className="mt-5 text-ivory/70 font-light text-sm sm:text-base">
-              Real reviews from real installs. Softer, fuller, still fresh after weeks.
-            </p>
-          </Reveal>
-
-          {/* Featured review */}
-          <Reveal delay={200} className="max-w-3xl mx-auto mb-14 sm:mb-20">
-            <figure className="relative text-center px-2 sm:px-10">
-              <div className="flex justify-center gap-0.5 text-champagne mb-5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-champagne" strokeWidth={0} />
-                ))}
-              </div>
-              <blockquote className="font-display text-2xl sm:text-3xl lg:text-4xl leading-[1.25] text-ivory">
-                &ldquo;{featuredReview.body}&rdquo;
-              </blockquote>
-              <figcaption className="mt-7 flex flex-col items-center">
-                <p className="font-display text-lg">{featuredReview.name}</p>
-                <p className="text-[10px] tracking-[0.28em] uppercase mt-2" style={{ color: "var(--gold)" }}>
-                  {featuredReview.location}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-cocoa-deep/90 via-cocoa-deep/35 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 text-ivory sm:p-6">
+                <p className="font-display text-[11px] tracking-[0.3em] text-champagne/80">
+                  {c.n}
                 </p>
-                <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] tracking-[0.2em] uppercase text-ivory/70 border border-ivory/20 px-2.5 py-1 rounded-full">
-                  <BadgeCheck className="h-3 w-3" strokeWidth={2} />
-                  Verified Client
-                </span>
-                <p className="text-xs text-ivory/60 mt-3 font-light italic">
-                  Purchased · {featuredReview.product}
-                </p>
-              </figcaption>
-            </figure>
-          </Reveal>
-
-          {/* Supporting reviews */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {reviews.map((r, i) => (
-              <Reveal key={r.name} delay={i * 140}>
-                <figure className="h-full bg-ivory/[0.04] border border-ivory/10 p-6 sm:p-8 hover:border-gold/40 transition-colors">
-                  <div className="flex gap-0.5 text-champagne mb-4">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <Star key={j} className="h-3 w-3 fill-champagne" strokeWidth={0} />
-                    ))}
-                  </div>
-                  <blockquote className="font-display text-lg sm:text-xl leading-snug text-ivory/95">
-                    &ldquo;{r.body}&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-5 pt-4 border-t border-ivory/10">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{r.name}</p>
-                        <p className="text-[10px] tracking-[0.24em] uppercase mt-1" style={{ color: "var(--gold)" }}>
-                          {r.location}
-                        </p>
-                      </div>
-                      <BadgeCheck className="h-4 w-4 shrink-0 text-champagne/80" strokeWidth={1.8} />
-                    </div>
-                    <p className="text-[11px] text-ivory/55 mt-2 font-light italic truncate">
-                      {r.product}
-                    </p>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Care For The Luxury — expandable */}
-      <section className="py-16 sm:py-28">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <Reveal className="text-center mb-10 sm:mb-14">
-            <p className="eyebrow mb-4">The Ritual</p>
-            <h2 className="font-display text-[2rem] sm:text-5xl leading-[1.05]">
-              Care For The Luxury.
-            </h2>
-            <p className="mt-4 text-sm sm:text-base text-muted-foreground font-light">
-              Three quiet habits that keep your hair looking day-one beautiful.
-            </p>
-          </Reveal>
-
-          <Accordion type="single" collapsible className="w-full">
-            {care.map((c, i) => (
-              <AccordionItem
-                key={c.title}
-                value={`care-${i}`}
-                className="border-b border-cocoa/15 py-1"
-              >
-                <AccordionTrigger className="font-display text-lg sm:text-xl text-left hover:no-underline py-5 [&>svg]:hidden group">
-                  <span className="flex items-center gap-4 pr-4">
-                    <span className="font-display text-xs text-gold w-5">0{i + 1}</span>
-                    {c.title}
-                  </span>
-                  <span className="relative h-4 w-4 shrink-0">
-                    <Plus className="absolute inset-0 h-4 w-4 text-cocoa group-data-[state=open]:opacity-0 transition-opacity" strokeWidth={1.5} />
-                    <Minus className="absolute inset-0 h-4 w-4 text-cocoa opacity-0 group-data-[state=open]:opacity-100 transition-opacity" strokeWidth={1.5} />
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="text-sm sm:text-base text-muted-foreground leading-relaxed pb-5 pl-9 pr-8 font-light">
-                  {c.copy}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-16 sm:py-28 bg-champagne/40">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <Reveal className="text-center mb-10 sm:mb-12">
-            <p className="eyebrow mb-4">Questions, answered</p>
-            <h2 className="font-display text-[2rem] sm:text-5xl">Frequently asked.</h2>
-          </Reveal>
-
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((f, i) => (
-              <AccordionItem
-                key={f.q}
-                value={`item-${i}`}
-                className="border-b border-cocoa/15 py-1"
-              >
-                <AccordionTrigger className="font-display text-base sm:text-xl text-left hover:no-underline py-5 [&>svg]:hidden group">
-                  <span className="pr-4">{f.q}</span>
-                  <span className="relative h-4 w-4 shrink-0">
-                    <Plus className="absolute inset-0 h-4 w-4 text-cocoa group-data-[state=open]:opacity-0 transition-opacity" strokeWidth={1.5} />
-                    <Minus className="absolute inset-0 h-4 w-4 text-cocoa opacity-0 group-data-[state=open]:opacity-100 transition-opacity" strokeWidth={1.5} />
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="text-sm sm:text-base text-muted-foreground leading-relaxed pb-5 pr-8 font-light">
-                  {f.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer id="contact" className="bg-cocoa-deep text-ivory/80">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-16 sm:pt-20 pb-32 sm:pb-10">
-          {/* Big logo moment */}
-          <div className="text-center pb-12 sm:pb-14 border-b border-ivory/10">
-            <div className="font-display text-[4.5rem] sm:text-8xl lg:text-9xl tracking-[0.28em] text-ivory leading-none">
-              AHB
-            </div>
-            <p className="text-[10px] sm:text-[11px] tracking-[0.5em] uppercase mt-4" style={{ color: "var(--gold)" }}>
-              Hair Extensions
-            </p>
-          </div>
-
-          {/* Newsletter */}
-          <div className="py-12 sm:py-14 grid lg:grid-cols-2 gap-8 items-center border-b border-ivory/10">
-            <div>
-              <p className="eyebrow mb-4" style={{ color: "var(--gold)" }}>
-                The AHB Letter
-              </p>
-              <h3 className="font-display text-2xl sm:text-4xl leading-tight text-ivory">
-                Early access to drops, styling notes, and quiet restocks.
-              </h3>
-            </div>
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                required
-                placeholder="Your email"
-                className="flex-1 min-w-0 h-12 bg-transparent border border-ivory/25 px-5 text-sm text-ivory placeholder:text-ivory/40 focus:outline-none focus:border-gold transition"
-              />
-              <button
-                type="submit"
-                className="h-12 px-8 bg-ivory text-cocoa-deep text-[11px] tracking-[0.24em] uppercase font-semibold hover:bg-champagne transition"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-
-          {/* Columns */}
-          <div className="py-12 sm:py-14 grid gap-10 md:grid-cols-4">
-            <div className="md:col-span-1">
-              <p className="text-sm leading-relaxed max-w-xs font-light text-ivory/75">
-                A boutique hair house for the woman who wears her radiance
-                without asking permission.
-              </p>
-              <div className="mt-6 flex gap-2">
-                <a className="p-2.5 border border-ivory/20 hover:bg-ivory/10 hover:border-gold/50 transition" href="#" aria-label="Instagram">
-                  <Instagram className="h-4 w-4" strokeWidth={1.5} />
-                </a>
-                <a className="p-2.5 border border-ivory/20 hover:bg-ivory/10 hover:border-gold/50 transition" href="#" aria-label="Facebook">
-                  <Facebook className="h-4 w-4" strokeWidth={1.5} />
-                </a>
-              </div>
-            </div>
-
-            {[
-              { title: "Shop", items: ["HD Lace Wigs", "Bundles", "Closures", "Frontals", "Gift Cards"] },
-              { title: "House", items: ["Our Story", "Client Diary", "Care Guide", "FAQ"] },
-            ].map((col) => (
-              <div key={col.title}>
-                <p className="eyebrow text-ivory/60 mb-5">{col.title}</p>
-                <ul className="space-y-3">
-                  {col.items.map((i) => (
-                    <li key={i}>
-                      <a href="#" className="text-sm hover:text-gold transition font-light">
-                        {i}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-
-            <div>
-              <p className="eyebrow text-ivory/60 mb-5">Contact & Pickup</p>
-              <ul className="space-y-3 text-sm font-light">
-                <li className="flex items-start gap-3">
-                  <MapPin className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "var(--gold)" }} strokeWidth={1.5} />
-                  <span>Local pickup by appointment</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Mail className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "var(--gold)" }} strokeWidth={1.5} />
-                  <a href="mailto:concierge@ahbhair.com" className="hover:text-gold transition break-all">
-                    concierge@ahbhair.com
-                  </a>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Phone className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "var(--gold)" }} strokeWidth={1.5} />
-                  <span>Message us for availability</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "var(--gold)" }} strokeWidth={1.5} />
-                  <span>Secure checkout — pickup only</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-ivory/10 flex flex-col sm:flex-row gap-3 justify-between items-center text-[11px] text-ivory/50">
-            <p>&copy; {new Date().getFullYear()} AHB Hair Extensions. All rights reserved.</p>
-            <p className="tracking-[0.24em] uppercase">A Black-owned luxury hair house</p>
-          </div>
-        </div>
-      </footer>
-
-      {/* Mobile sticky bottom nav */}
-      <nav className="fixed bottom-0 inset-x-0 z-30 sm:hidden bg-cocoa-deep/95 backdrop-blur-xl border-t border-ivory/10 pb-[env(safe-area-inset-bottom)]">
-        <ul className="grid grid-cols-4">
-          {[
-            { label: "Shop", icon: HomeIcon, href: "/shop" },
-            { label: "Reviews", icon: Star, href: "#reviews" },
-            { label: "Contact", icon: MessageCircle, href: "#contact" },
-            { label: "Cart", icon: ShoppingBag, href: "/cart" },
-          ].map(({ label, icon: Icon, href }) => (
-            <li key={label}>
-              <a
-                href={href}
-                className="flex flex-col items-center justify-center gap-1 py-3 text-ivory/80 hover:text-champagne active:bg-ivory/5 transition"
-              >
-                <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
-                <span className="text-[9px] tracking-[0.2em] uppercase font-light">{label}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* Quick View Bottom Sheet */}
-      <Sheet open={!!quickView} onOpenChange={(o) => !o && setQuickView(null)}>
-        <SheetContent
-          side="bottom"
-          className="p-0 bg-ivory rounded-t-3xl max-h-[92vh] overflow-y-auto border-t-0"
-        >
-          {quickView && (
-            <div>
-              <button
-                onClick={() => setQuickView(null)}
-                aria-label="Close quick view"
-                className="absolute top-3 right-3 z-20 h-10 w-10 grid place-items-center rounded-full bg-cocoa-deep text-ivory shadow-lg hover:bg-cocoa transition"
-              >
-                <X className="h-5 w-5" strokeWidth={1.75} />
-              </button>
-              <div className="pt-3 pb-1 flex justify-center">
-                <span className="h-1 w-10 rounded-full bg-cocoa/20" />
-              </div>
-              <SheetHeader className="sr-only">
-                <SheetTitle>{quickView.name}</SheetTitle>
-                <SheetDescription>{quickView.description}</SheetDescription>
-              </SheetHeader>
-
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-champagne">
-                <img
-                  src={quickView.img}
-                  alt={quickView.name}
-                  className="h-full w-full object-cover"
-                />
-                {quickView.tag && (
-                  <span className="absolute top-3 left-3 bg-ivory/95 text-cocoa-deep text-[9px] tracking-[0.18em] uppercase px-2 py-1 font-medium">
-                    {quickView.tag}
-                  </span>
-                )}
-              </div>
-
-              <div className="p-6 pb-8">
-                <p className="eyebrow mb-2">{quickView.length}</p>
-                <h3 className="font-display text-2xl sm:text-3xl text-cocoa-deep">
-                  {quickView.name}
+                <h3 className="mt-1.5 font-display text-2xl leading-tight sm:text-3xl">
+                  {c.title}
                 </h3>
-                <p className="mt-2 text-lg text-cocoa font-medium">{quickView.price}</p>
-                <p className="mt-4 text-sm text-muted-foreground leading-relaxed font-light">
-                  {quickView.description}
+                <p className="mt-2 max-w-[26ch] text-[12.5px] font-light leading-snug text-ivory/75">
+                  {c.line}
                 </p>
-
-                {quickView.lengths && (
-                  <div className="mt-6">
-                    <p className="eyebrow mb-3">Length</p>
-                    <div className="flex flex-wrap gap-2">
-                      {quickView.lengths.map((l) => (
-                        <button
-                          key={l}
-                          onClick={() => setSelectedLength(l)}
-                          className={`h-10 min-w-[54px] px-3 border text-[11px] tracking-[0.2em] uppercase transition ${
-                            selectedLength === l
-                              ? "bg-cocoa-deep text-ivory border-cocoa-deep"
-                              : "bg-transparent text-cocoa-deep border-cocoa/25 hover:border-cocoa"
-                          }`}
-                        >
-                          {l}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="mt-8 flex flex-col gap-3">
-                  {quickView.available ? (
-                    <button className="h-12 bg-cocoa-deep text-ivory text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-cocoa transition">
-                      Add to Cart
-                    </button>
-                  ) : (
-                    <div className="text-[11px] tracking-[0.22em] uppercase text-cocoa/70 text-center py-2">
-                      Currently unavailable
-                    </div>
-                  )}
-                  <button className="h-12 border border-cocoa-deep text-cocoa-deep text-[11px] tracking-[0.26em] uppercase font-semibold hover:bg-cocoa-deep hover:text-ivory transition">
-                    Ask About Availability
-                  </button>
+                <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                  {c.links.map((l) => (
+                    <Link
+                      key={l.label}
+                      to="/collections/$category"
+                      params={{ category: l.category }}
+                      className="inline-flex min-h-[36px] items-center gap-1.5 border-b border-champagne/50 pb-0.5 text-[10px] uppercase tracking-[0.22em] text-ivory hover:border-gold hover:text-gold"
+                    >
+                      {l.label}
+                      <ChevronRight className="h-3 w-3" strokeWidth={2} />
+                    </Link>
+                  ))}
                 </div>
+              </div>
+            </Reveal>
+          ))}
+          <div className="w-1 shrink-0 lg:hidden" aria-hidden />
+        </div>
+      </section>
 
-                <p className="mt-5 text-[11px] text-center text-muted-foreground font-light">
-                  Local pickup only · Secure checkout
+      {/* ── TEXTURE LIBRARY ───────────────────────────── */}
+      <section className="border-y border-cocoa/12 bg-champagne/35 py-14 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <Reveal>
+            <p className="eyebrow" style={{ color: "var(--gold)" }}>
+              Texture Library
+            </p>
+          </Reveal>
+          <h2 className="mt-3 max-w-lg font-display text-[1.9rem] leading-[1.08] sm:text-5xl">
+            <RevealWords text="Find Your Texture" />
+          </h2>
+        </div>
+
+        <div className="mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 sm:gap-4 sm:px-8 lg:grid lg:grid-cols-4 lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {textureList.map((t, i) => (
+            <Reveal
+              key={t.slug}
+              delay={i * 90}
+              className="w-[62vw] max-w-[280px] shrink-0 snap-start lg:w-auto lg:max-w-none"
+            >
+              <Link to="/textures/$texture" params={{ texture: t.slug }} className="group block">
+                <RevealImage
+                  src={t.img}
+                  alt={`${t.name} hair texture`}
+                  delay={i * 70}
+                  className="aspect-[4/5] w-full bg-sand"
+                  imgClassName="transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
+                />
+                <div className="mt-3 flex items-baseline justify-between gap-3">
+                  <h3 className="min-w-0 font-display text-lg leading-tight sm:text-xl">
+                    {t.name}
+                  </h3>
+                  <span className="shrink-0 font-display text-[10px] tracking-[0.28em] text-cocoa/45">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
+          <div className="w-1 shrink-0 lg:hidden" aria-hidden />
+        </div>
+      </section>
+
+      {/* ── BEST SELLERS ──────────────────────────────── */}
+      <section className="py-14 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <div className="flex items-end justify-between gap-6">
+            <div className="min-w-0">
+              <Reveal>
+                <p className="eyebrow" style={{ color: "var(--gold)" }}>
+                  Loved On Repeat
+                </p>
+              </Reveal>
+              <h2 className="mt-3 font-display text-[1.9rem] leading-[1.08] sm:text-5xl">
+                <RevealWords text="Best Sellers" />
+              </h2>
+            </div>
+            <Reveal className="shrink-0">
+              <Link
+                to="/collections/$category"
+                params={{ category: "best-sellers" }}
+                className="border-b border-cocoa-deep/40 pb-1 text-[10px] uppercase tracking-[0.24em] hover:border-cocoa-deep"
+              >
+                View all
+              </Link>
+            </Reveal>
+          </div>
+
+          <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-9 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-4">
+            {bestSellers.map((p, i) => (
+              <ProductCard
+                key={p.slug}
+                product={p}
+                index={i}
+                numbered
+                onQuickView={quick.open}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BRAND STORY ───────────────────────────────── */}
+      <section className="bg-cocoa-deep text-ivory">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+          <RevealImage
+            src={storyImg}
+            alt="AHB studio detail"
+            className="aspect-[4/5] w-full bg-cocoa"
+          />
+          <div className="min-w-0">
+            <Reveal>
+              <p className="eyebrow" style={{ color: "var(--gold)" }}>
+                The House
+              </p>
+            </Reveal>
+            <h2 className="mt-3 font-display text-[2rem] leading-[1.06] sm:text-5xl">
+              <RevealWords text="Hair That Moves Like It's Yours" />
+            </h2>
+            <Reveal delay={140}>
+              <div className="mt-6 space-y-4 text-sm font-light leading-relaxed text-ivory/75 sm:text-base">
+                <p>
+                  AHB started the way most good things do — one client at a time,
+                  hair chosen by hand instead of by the box. Every unit is checked
+                  for softness, weft strength, and how the lace sits before it's
+                  offered here.
+                </p>
+                <p>
+                  Nothing is warehoused in bulk. Drops are small, lengths sell
+                  through, and we'd rather tell you to wait a week than hand you
+                  something we wouldn't wear ourselves.
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  to="/shop"
+                  className="grid min-h-[52px] place-items-center bg-ivory px-8 text-[11px] font-semibold uppercase tracking-[0.26em] text-cocoa-deep transition hover:bg-champagne"
+                >
+                  Shop the house
+                </Link>
+                <Link
+                  to="/contact"
+                  className="grid min-h-[52px] place-items-center border border-ivory/50 px-8 text-[11px] font-semibold uppercase tracking-[0.26em] text-ivory transition hover:bg-ivory hover:text-cocoa-deep"
+                >
+                  Book a pickup
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CLIENT DIARY ──────────────────────────────── */}
+      <section id="reviews" className="py-14 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <Reveal>
+            <p className="eyebrow" style={{ color: "var(--gold)" }}>
+              Client Diary
+            </p>
+          </Reveal>
+
+          {featuredReview ? (
+            <>
+              <Reveal delay={100}>
+                <blockquote className="mt-6 max-w-3xl">
+                  <p className="font-display text-[1.6rem] leading-[1.22] sm:text-4xl">
+                    “{featuredReview.body}”
+                  </p>
+                  <footer className="mt-5 text-[10px] uppercase tracking-[0.26em] text-cocoa/60">
+                    {featuredReview.name}
+                    {featuredReview.location ? ` · ${featuredReview.location}` : ""}
+                    {featuredReview.product ? ` · ${featuredReview.product}` : ""}
+                  </footer>
+                </blockquote>
+              </Reveal>
+
+              {supportingReviews.length > 0 && (
+                <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 lg:grid lg:grid-cols-3 lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {supportingReviews.map((r, i) => (
+                    <Reveal
+                      key={r.name + i}
+                      delay={i * 100}
+                      className="w-[82vw] max-w-[380px] shrink-0 snap-start border border-cocoa/12 bg-champagne/30 p-6 lg:w-auto lg:max-w-none"
+                    >
+                      <p className="text-[15px] font-light leading-relaxed text-cocoa-deep/90">
+                        “{r.body}”
+                      </p>
+                      <p className="mt-4 text-[10px] uppercase tracking-[0.24em] text-cocoa/55">
+                        {r.name}
+                        {r.location ? ` · ${r.location}` : ""}
+                      </p>
+                    </Reveal>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <Reveal delay={100}>
+              <div className="mt-6 max-w-2xl border-l border-gold/50 pl-6 sm:pl-8">
+                <h2 className="font-display text-[1.7rem] leading-[1.14] sm:text-4xl">
+                  Client notes are collected in person.
+                </h2>
+                <p className="mt-4 text-sm font-light leading-relaxed text-muted-foreground sm:text-base">
+                  We only publish words a client actually wrote. If you've worn an
+                  AHB install, send us your note after your pickup and it will live
+                  here — in your own words, with your name on it.
+                </p>
+                <Link
+                  to="/contact"
+                  className="mt-7 inline-grid min-h-[52px] place-items-center border border-cocoa-deep px-8 text-[11px] font-semibold uppercase tracking-[0.26em] text-cocoa-deep transition hover:bg-cocoa-deep hover:text-ivory"
+                >
+                  Share your experience
+                </Link>
+              </div>
+            </Reveal>
+          )}
+        </div>
+      </section>
+
+      {/* ── CARE ──────────────────────────────────────── */}
+      <section className="border-y border-cocoa/12 bg-champagne/35 py-14 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+          <div className="min-w-0">
+            <Reveal>
+              <p className="eyebrow" style={{ color: "var(--gold)" }}>
+                The Ritual
+              </p>
+            </Reveal>
+            <h2 className="mt-3 font-display text-[1.9rem] leading-[1.08] sm:text-5xl">
+              <RevealWords text="Care For The Hair" />
+            </h2>
+            <Reveal delay={120}>
+              <p className="mt-4 max-w-sm text-sm font-light leading-relaxed text-muted-foreground">
+                Raw hair rewards patience. Four habits keep your install soft for
+                months instead of weeks.
+              </p>
+            </Reveal>
+          </div>
+          <Tapper items={rituals} />
+        </div>
+      </section>
+
+      {/* ── FAQ ───────────────────────────────────────── */}
+      <section className="py-14 sm:py-24">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8">
+          <Reveal>
+            <p className="eyebrow" style={{ color: "var(--gold)" }}>
+              Good To Know
+            </p>
+          </Reveal>
+          <h2 className="mt-3 font-display text-[1.9rem] leading-[1.08] sm:text-5xl">
+            <RevealWords text="Questions, Answered" />
+          </h2>
+          <Tapper items={faqs} className="mt-8" />
+          <Reveal delay={120}>
+            <p className="mt-8 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-cocoa/60">
+              <MapPin className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+              Local pickup by appointment · No shipping
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <SiteFooter />
+      <MobileBottomNav />
+      <QuickView product={quick.product} onClose={quick.close} />
+    </div>
+  );
+}
+
+/** Tap-to-expand editorial list — used for care rituals and FAQ. */
+function Tapper({
+  items,
+  className = "",
+}: {
+  items: { q: string; a: string }[];
+  className?: string;
+}) {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <div className={`min-w-0 ${className}`}>
+      {items.map((it, i) => {
+        const isOpen = open === i;
+        return (
+          <Reveal key={it.q} delay={i * 80} className="border-t border-cocoa/15 last:border-b">
+            <button
+              onClick={() => setOpen(isOpen ? null : i)}
+              aria-expanded={isOpen}
+              className="flex min-h-[60px] w-full items-center justify-between gap-4 py-4 text-left"
+            >
+              <span className="flex min-w-0 items-baseline gap-4">
+                <span className="shrink-0 font-display text-[11px] tracking-[0.26em] text-cocoa/45">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="min-w-0 font-display text-lg leading-snug sm:text-xl">
+                  {it.q}
+                </span>
+              </span>
+              {isOpen ? (
+                <Minus className="h-4 w-4 shrink-0 text-cocoa" strokeWidth={1.5} />
+              ) : (
+                <Plus className="h-4 w-4 shrink-0 text-cocoa" strokeWidth={1.5} />
+              )}
+            </button>
+            <div
+              className={`grid transition-all duration-700 ease-[cubic-bezier(0.16,0.84,0.28,1)] ${
+                isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="pb-5 pl-[calc(1rem+1.6em)] pr-6 text-sm font-light leading-relaxed text-muted-foreground">
+                  {it.a}
                 </p>
               </div>
             </div>
-          )}
-        </SheetContent>
-      </Sheet>
+          </Reveal>
+        );
+      })}
     </div>
   );
 }
