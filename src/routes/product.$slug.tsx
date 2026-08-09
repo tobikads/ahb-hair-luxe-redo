@@ -1,6 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, Minus, Plus, ShieldCheck, MapPin, Sparkles } from "lucide-react";
+import { Minus, Plus, ShieldCheck, MapPin, Sparkles } from "lucide-react";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+
 
 import { getProduct, type ProductDetail, type LengthOption, type ColorOption } from "@/data/products";
 import {
