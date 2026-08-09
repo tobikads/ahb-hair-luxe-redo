@@ -137,7 +137,10 @@ function ProductPage() {
           </button>
         </div>
       </div>
+
+      <SiteFooter />
     </div>
+
   );
 }
 
