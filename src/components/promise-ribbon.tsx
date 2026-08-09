@@ -1,17 +1,14 @@
-const lineOne = [
+const trackOne = [
   "Soft From Root To Ends",
-  "HD Lace Finish",
   "Made To Blend",
   "Installed To Be Noticed",
-  "Raw Texture",
 ];
 
-const lineTwo = [
-  "Local Pickup Available",
+const trackTwo = [
+  "Raw Texture",
   "Melted Lace",
-  "Full Ends. Soft Touch.",
-  "Pickup Ready Drops",
-  "By Appointment",
+  "Full Ends",
+  "Pickup Ready",
 ];
 
 function Track({
@@ -19,15 +16,20 @@ function Track({
   duration,
   reverse = false,
   className = "",
+  size = "lg",
 }: {
   items: string[];
   duration: string;
   reverse?: boolean;
   className?: string;
+  size?: "lg" | "sm";
 }) {
-  // Two identical halves so the -50% translate loops seamlessly.
-  const half = [...items, ...items];
-  const loop = [...half, ...half];
+  // Four copies so a -50% translate loops with no visible seam.
+  const loop = [...items, ...items, ...items, ...items];
+  const type =
+    size === "lg"
+      ? "font-display text-[19px] tracking-[0.05em] sm:text-[34px]"
+      : "text-[10px] font-medium uppercase tracking-[0.34em] sm:text-[12px]";
 
   return (
     <div
@@ -39,27 +41,30 @@ function Track({
     >
       {loop.map((phrase, i) => (
         <span key={`${phrase}-${i}`} className="flex shrink-0 items-center">
-          <span className="px-4 font-display text-[15px] leading-none tracking-[0.06em] text-ivory sm:px-7 sm:text-[20px]">
-            {phrase}
-          </span>
-          <span className="h-[5px] w-[5px] rotate-45 bg-gold/70" />
+          <span className={`px-4 leading-none text-ivory sm:px-8 ${type}`}>{phrase}</span>
+          <span className="h-[6px] w-[6px] rotate-45 border border-gold/70" />
         </span>
       ))}
     </div>
   );
 }
 
+/** The AHB Quality Code — two-track editorial ribbon, opposing directions. */
 export function PromiseRibbon() {
   return (
     <section
-      aria-label="AHB house promises"
-      className="relative isolate overflow-hidden border-y border-gold/20 bg-cocoa-deep py-4 text-ivory sm:py-6"
+      aria-label="The AHB quality code"
+      className="relative isolate overflow-hidden bg-cocoa-deep py-5 text-ivory sm:py-8"
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-cocoa-deep to-transparent sm:w-24" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-cocoa-deep to-transparent sm:w-24" />
-      <Track items={lineOne} duration="46s" />
-      <div className="mt-2.5 sm:mt-4">
-        <Track items={lineTwo} duration="64s" reverse className="opacity-65" />
+      <span className="absolute inset-x-0 top-0 h-px bg-gold/35" />
+      <span className="absolute inset-x-0 bottom-0 h-px bg-gold/35" />
+
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-cocoa-deep to-transparent sm:w-40" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-cocoa-deep to-transparent sm:w-40" />
+
+      <Track items={trackOne} duration="52s" />
+      <div className="mt-3 sm:mt-5">
+        <Track items={trackTwo} duration="34s" reverse size="sm" className="text-gold/80" />
       </div>
     </section>
   );
