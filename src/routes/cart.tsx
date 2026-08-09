@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShoppingBag, MapPin, ShieldCheck } from "lucide-react";
-import { PageHeader } from "@/components/catalog-shell";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -16,7 +18,7 @@ export const Route = createFileRoute("/cart")({
 function CartPage() {
   return (
     <div className="min-h-screen bg-background">
-      <PageHeader />
+      <SiteHeader />
       <section className="mx-auto max-w-2xl px-5 sm:px-8 py-16 sm:py-24 text-center">
         <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-champagne/50 text-cocoa-deep">
           <ShoppingBag className="h-6 w-6" strokeWidth={1.5} />
@@ -61,6 +63,8 @@ function CartPage() {
           </li>
         </ul>
       </section>
+      <SiteFooter />
+      <MobileBottomNav />
     </div>
   );
 }
