@@ -28,7 +28,7 @@ const linkClass =
 const underline =
   "after:absolute after:-bottom-2 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-500 hover:after:scale-x-100 data-[status=active]:after:scale-x-100 data-[status=active]:text-champagne";
 
-export function SiteHeader() {
+export function SiteHeader({ overHero = false }: { overHero?: boolean } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropOpen, setDropOpen] = useState(false);
@@ -49,7 +49,13 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-cocoa-deep text-ivory">
+      <header
+        className={`sticky top-0 z-40 text-ivory transition-colors duration-500 ${
+          overHero && !scrolled
+            ? "bg-transparent"
+            : "bg-cocoa-deep"
+        }`}
+      >
         {/* editorial detail line */}
         <div
           className={`overflow-hidden border-b border-ivory/10 transition-all duration-500 ${

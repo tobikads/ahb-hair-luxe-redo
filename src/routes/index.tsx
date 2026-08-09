@@ -82,8 +82,7 @@ function Spec({ items, tone = "dark" }: { items: string[]; tone?: "dark" | "ligh
 function CtaSolid({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
-      // @ts-expect-error simple internal path
-      to={to}
+      to={to as never}
       className="group inline-flex min-h-[44px] items-center gap-2 bg-ivory px-7 py-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-cocoa-deep transition-colors hover:bg-gold"
     >
       {children}
@@ -98,8 +97,7 @@ function CtaSolid({ to, children }: { to: string; children: React.ReactNode }) {
 function CtaGhost({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
-      // @ts-expect-error simple internal path
-      to={to}
+      to={to as never}
       className="group inline-flex min-h-[44px] items-center gap-2 border border-ivory/50 px-7 py-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-ivory transition-colors hover:border-gold hover:text-gold"
     >
       {children}
