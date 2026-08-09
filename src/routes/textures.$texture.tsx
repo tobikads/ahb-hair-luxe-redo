@@ -4,19 +4,18 @@ import { CollectionView } from "@/components/collection-view";
 
 export const Route = createFileRoute("/textures/$texture")({
   loader: ({ params }) => {
-    const t = textures[params.texture];
-    if (!t) throw notFound();
-    return { texture: t, items: productsByTexture(t) };
+    if (!textures[params.texture]) throw notFound();
+    return null;
   },
-  head: ({ loaderData }) => {
-    if (!loaderData)
+  head: ({ params }) => {
+    const texture = textures[params.texture];
+    if (!texture)
       return {
         meta: [
           { title: "Texture not found — AHB" },
           { name: "robots", content: "noindex" },
         ],
       };
-    const { texture } = loaderData;
     return {
       meta: [
         { title: `${texture.name} Hair — AHB Hair Extensions` },
@@ -41,14 +40,16 @@ export const Route = createFileRoute("/textures/$texture")({
 });
 
 function TexturePage() {
-  const { texture, items } = Route.useLoaderData();
+  const { texture: slug } = Route.useParams();
+  const texture = textures[slug];
+  if (!texture) return null;
   return (
     <CollectionView
       eyebrow="Texture Library"
       title={texture.name}
       intro={texture.description}
       hero={texture.img}
-      items={items}
+      items={productsByTexture(texture)}
     />
   );
 }
