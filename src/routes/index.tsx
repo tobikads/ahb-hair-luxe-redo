@@ -83,7 +83,7 @@ function CtaSolid({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to as never}
-      className="group inline-flex min-h-[44px] items-center gap-2 bg-ivory px-7 py-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-cocoa-deep transition-colors hover:bg-gold"
+      className="group inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap bg-ivory px-5 py-3 text-[9.5px] font-semibold uppercase tracking-[0.22em] sm:px-7 sm:text-[10px] sm:tracking-[0.3em] text-cocoa-deep transition-colors hover:bg-gold"
     >
       {children}
       <ArrowUpRight
@@ -98,7 +98,7 @@ function CtaGhost({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to as never}
-      className="group inline-flex min-h-[44px] items-center gap-2 border border-ivory/50 px-7 py-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-ivory transition-colors hover:border-gold hover:text-gold"
+      className="group inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap border border-ivory/50 px-5 py-3 text-[9.5px] font-semibold uppercase tracking-[0.22em] sm:px-7 sm:text-[10px] sm:tracking-[0.3em] text-ivory transition-colors hover:border-gold hover:text-gold"
     >
       {children}
       <ArrowUpRight
@@ -133,14 +133,14 @@ function Hero() {
       </div>
 
       <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-24 pt-24 sm:px-14 sm:pb-20">
-        <div className="max-w-[22ch] sm:max-w-[26ch]">
+        <div className="max-w-[30ch] sm:max-w-[34ch]">
           <Reveal>
             <p className="text-[9px] font-medium uppercase tracking-[0.44em] text-gold">
               The AHB Private Edit
             </p>
           </Reveal>
 
-          <h1 className="mt-5 font-display text-[3.1rem] leading-[0.92] sm:text-[5.5rem] lg:text-[6.75rem]">
+          <h1 className="mt-5 max-w-[9ch] font-display text-[3.1rem] leading-[0.92] sm:text-[5.5rem] lg:text-[6.75rem]">
             <span className="block">
               <RevealWords text="Unlock" />
             </span>
