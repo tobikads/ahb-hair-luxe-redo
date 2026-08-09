@@ -41,7 +41,7 @@ function Track({
     >
       {loop.map((phrase, i) => (
         <span key={`${phrase}-${i}`} className="flex shrink-0 items-center">
-          <span className={`px-4 leading-none text-ivory sm:px-8 ${type}`}>{phrase}</span>
+          <span className={`px-4 leading-none sm:px-8 ${size === "lg" ? "text-ivory" : "text-gold/80"} ${type}`}>{phrase}</span>
           <span className="h-[6px] w-[6px] rotate-45 border border-gold/70" />
         </span>
       ))}
@@ -64,7 +64,7 @@ export function PromiseRibbon() {
 
       <Track items={trackOne} duration="52s" />
       <div className="mt-3 sm:mt-5">
-        <Track items={trackTwo} duration="34s" reverse size="sm" className="text-gold/80" />
+        <Track items={trackTwo} duration="34s" reverse size="sm" />
       </div>
     </section>
   );
